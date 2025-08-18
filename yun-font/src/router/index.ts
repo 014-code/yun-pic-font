@@ -2,7 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import OtherView from '@/views/OtherView.vue'
-import AboutView from '@/views/AboutView.vue'
+import UserMagerView from '@/views/UserMagerView.vue'
+import LoginView from '@/views/LoginView.vue'
+import RegisterView from '@/views/RegisterView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -22,10 +24,22 @@ const routes: Array<RouteRecordRaw> = [
     component: OtherView
   },
   {
-    // 主页
-    path: '/about',
-    name: 'about',
-    component: AboutView
+    // 用户管理页
+    path: '/user-mager',
+    name: 'user-mager',
+    component: UserMagerView
+  },
+  {
+    // 登录
+    path: '/login',
+    name: 'login',
+    component: LoginView
+  },
+  {
+    // 注册
+    path: '/register',
+    name: 'register',
+    component: RegisterView
   }
 
 ]

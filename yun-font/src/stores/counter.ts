@@ -5,7 +5,7 @@ export const useLoginUserStore = defineStore('loginUser', () => {
 
   //登录用户
   const loginUser = ref<any>({
-    userName: '嘿嘿嘿'
+    // userName: '嘿嘿嘿'
   })
 
   /**

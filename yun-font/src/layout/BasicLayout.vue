@@ -19,8 +19,8 @@
               <a-menu-item key="/home">
                 主页
               </a-menu-item>
-              <a-menu-item key="/about">
-                关于
+              <a-menu-item key="/user-mager">
+                用户管理
               </a-menu-item>
               <a-menu-item key="/other">
                 其它
@@ -35,30 +35,40 @@
                   <AntDesignOutlined />
                 </template>
               </a-avatar>
-              <span>{{ loginUserStore.loginUser.userName }}</span>
+              <a-dropdown>
+                <span>{{ loginUserStore.loginUser.userName }}</span>
+                <template #overlay>
+                  <a-menu>
+                    <a-menu-item>
+                      <a @click="logoutLogin()">退出登录</a>
+                    </a-menu-item>
+                  </a-menu>
+                </template>
+              </a-dropdown>
+              <a-tag v-if="loginUserStore.loginUser.role" style="margin-left: 10px">{{ loginUserStore.loginUser.role }}</a-tag>
             </template>
             <template v-else>
-              <a-button type="primary">登录</a-button>
+              <a-button type="primary" @click="toLogin">登录</a-button>
             </template>
           </a-col>
         </a-row>
       </a-layout-header>
       <a-layout>
         <!--   左边菜单栏     -->
-        <a-layout-sider class="layout-sider">
-          <a-menu
-            id="amenu"
-            style="width: 100%"
-            v-model:openKeys="openKeys"
-            v-model:selectedKeys="selectedKeys"
-            mode="inline"
-            @click="handleClick"
-          >
-            <a-sub-menu key="sub1" @titleClick="titleClick">
-              <template #title>菜单</template>
-            </a-sub-menu>
-          </a-menu>
-        </a-layout-sider>
+<!--        <a-layout-sider class="layout-sider">-->
+        <!--          <a-menu-->
+        <!--            id="amenu"-->
+        <!--            style="width: 100%"-->
+        <!--            v-model:openKeys="openKeys"-->
+        <!--            v-model:selectedKeys="selectedKeys"-->
+        <!--            mode="inline"-->
+        <!--            @click="handleClick"-->
+        <!--          >-->
+        <!--            <a-sub-menu key="sub1" @titleClick="titleClick">-->
+        <!--              <template #title>菜单</template>-->
+        <!--            </a-sub-menu>-->
+        <!--          </a-menu>-->
+        <!--        </a-layout-sider>-->
         <!--   内容-router-view   -->
         <a-layout-content class="latout-content">
           <router-view></router-view>
@@ -103,6 +113,22 @@ function menuClick({ key }: { key: string }) {
   router.push({
     path: key
   })
+}
+
+/**
+ * 跳转到登录页
+ */
+function toLogin() {
+  router.push('/login')
+}
+
+/**
+ * 退出登录方法
+ */
+function logoutLogin() {
+  //移除登录态-todo使用vue-cookie
+  //清空pinia里面的用户数据
+  loginUserStore.setLoginUser(null);
 }
 
 </script>

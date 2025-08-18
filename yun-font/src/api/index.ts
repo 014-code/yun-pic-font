@@ -2,7 +2,7 @@
 /* eslint-disable */
 // API 更新时间：
 // API 唯一标识：
-import * as testController from './testController'
+import * as yonghumokuai from './user.ts'
 export default {
-  testController,
+  yonghumokuai,
 }
