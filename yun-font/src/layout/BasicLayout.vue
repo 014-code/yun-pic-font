@@ -15,22 +15,14 @@
           </a-col>
           <a-col flex="auto">
             <!--    中间导航栏    -->
-            <a-menu v-model:selectedKeys="current" mode="horizontal" @click="menuClick">
-              <a-menu-item key="/home">
-                主页
-              </a-menu-item>
-              <a-menu-item key="/user-mager">
-                用户管理
-              </a-menu-item>
-              <a-menu-item key="/other">
-                其它
-              </a-menu-item>
+            <a-menu v-model:selectedKeys="current" mode="horizontal" @click="menuClick"
+                    :items="visibleMenus">
             </a-menu>
           </a-col>
-          <a-col flex="100px">
+          <a-col flex="200px">
             <!--    右边登录注册/个人信息    -->
             <template v-if="loginUserStore.loginUser.userName">
-              <a-avatar style="margin-right: 20px;">
+              <a-avatar style="margin-right: 10px;" :src="loginUserStore.loginUser.avatar">
                 <template #icon>
                   <AntDesignOutlined />
                 </template>
@@ -45,7 +37,10 @@
                   </a-menu>
                 </template>
               </a-dropdown>
-              <a-tag v-if="loginUserStore.loginUser.role" style="margin-left: 10px">{{ loginUserStore.loginUser.role }}</a-tag>
+              <a-tag v-if="loginUserStore.loginUser.role" color="blue" style="margin-left: 10px">
+                <div v-if="loginUserStore.loginUser.role === 'admin'">{{ '管理员' }}</div>
+                <div v-else="loginUserStore.loginUser.role === 'admin'">{{ '用户' }}</div>
+              </a-tag>
             </template>
             <template v-else>
               <a-button type="primary" @click="toLogin">登录</a-button>
@@ -55,7 +50,7 @@
       </a-layout-header>
       <a-layout>
         <!--   左边菜单栏     -->
-<!--        <a-layout-sider class="layout-sider">-->
+        <!--        <a-layout-sider class="layout-sider">-->
         <!--          <a-menu-->
         <!--            id="amenu"-->
         <!--            style="width: 100%"-->
@@ -85,15 +80,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import router from '@/router'
 import { useRouter } from 'vue-router'
 import { AntDesignOutlined } from '@ant-design/icons-vue'
 import { useLoginUserStore } from '@/stores/counter.ts'
+import { cancellationUsingPost } from '@/api/user.ts'
+import { removeToken } from '@/utils/cookies.ts'
+import ACCESS_ENUM from '@/types/enum/accessEnum.ts'
+import checkAccess from '@/common/checkAccess.ts'
 //当前选中菜单
 const current = ref<string[]>(['home'])
 //从pinia里面拿取到的用户信息
 const loginUserStore = useLoginUserStore()
+
+const fullMenus: any = [
+  {
+    key: '/home',
+    label: '主页',
+    meta: { access: ACCESS_ENUM.NOT_LOGIN }
+  },
+  {
+    key: '/user-manager',
+    label: '用户管理',
+    meta: { access: ACCESS_ENUM.ADMIN } // 仅管理员可见
+  },
+  {
+    key: '/other',
+    label: '其它',
+    meta: { access: ACCESS_ENUM.NOT_LOGIN }
+  }
+]
 
 //发送获取用户信息接口?
 // loginUserStore.fetchLoginUser()
@@ -122,18 +139,53 @@ function toLogin() {
   router.push('/login')
 }
 
+// 动态计算可见菜单
+const visibleMenus = computed(() => {
+  return fullMenus.filter(menu => {
+    // 隐藏菜单项
+    if (menu.meta?.hideInMenu) return false
+
+    // 检查权限
+    return checkAccess(loginUserStore.loginUser, menu.meta?.access)
+  })
+})
+
 /**
  * 退出登录方法
  */
 function logoutLogin() {
-  //移除登录态-todo使用vue-cookie
-  //清空pinia里面的用户数据
-  loginUserStore.setLoginUser(null);
+  // 调用后端注销接口
+  cancellationUsingPost().then(() => {
+    // 移除cookie中的token
+    removeToken()
+    // 清空pinia里面的用户数据
+    loginUserStore.setLoginUser(null)
+    console.log(loginUserStore.loginUser)
+    // 跳转到登录页
+    router.push('/login')
+  }).catch((error) => {
+    // 即使后端注销失败，也要清除本地状态
+    removeToken()
+    loginUserStore.setLoginUser(null)
+    router.push('/login')
+    console.error('注销失败:', error)
+  })
 }
 
 </script>
 
 <style lang="scss" scoped>
+#BasicLayout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#BasicLayout .ant-layout {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 
 .layout-header {
   background-color: white;
@@ -144,12 +196,16 @@ function logoutLogin() {
 }
 
 .layout-footer {
+  width: 100%;
   text-align: center;
   background-color: rgb(243, 243, 243);
+  height: 69px; // 明确设置footer高度
+  line-height: 69px; // 垂直居中
+  transform: translateY(-25px);
 }
 
 .latout-content {
-  height: 100vh;
+  min-height: calc(100vh - 64px - 69px); // 64px是header高度，69px是footer高度
 }
 
 </style>

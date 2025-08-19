@@ -24,10 +24,14 @@ declare namespace API {
   }
 
   type listUserUsingPOSTParams = {
+    /** 账号 */
+    account?: string
     /** 页码 */
     pageNum: number
     /** 条数 */
     pageSize: number
+    /** 用户名 */
+    userName?: string
   }
 
   type LoginParam = {

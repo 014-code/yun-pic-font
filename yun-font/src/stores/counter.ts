@@ -4,9 +4,7 @@ import { defineStore } from 'pinia'
 export const useLoginUserStore = defineStore('loginUser', () => {
 
   //登录用户
-  const loginUser = ref<any>({
-    // userName: '嘿嘿嘿'
-  })
+  const loginUser = ref<any>({})
 
   /**
    * 接口请求

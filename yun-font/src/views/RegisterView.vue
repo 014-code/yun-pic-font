@@ -103,23 +103,22 @@ function onSubmit() {
     .then(() => {
       // 验证通过后执行注册
       registerUsingPost(formState).then(res => {
-        //调用获取用户信息接口
+        message.success(res.msg)
+        // 注册成功后自动登录
+        // 存储token到cookies中
+        setToken(res.data)
+        // 调用获取用户信息接口
         infoUsingGet().then(res => {
-          //存储到pinia中
-          registerUser.setLoginUser(res.data.data)
-        })
-        message.success(res.data.msg)
-        //跳转
-        router.push({
-          path: '/home'
+          // 存储到pinia中
+          registerUser.setLoginUser(res.data)
+          // 跳转到首页
+          router.push({
+            path: '/home'
+          })
         })
       }).catch(err => {
-        message.error(err.data.msg)
+        message.error(err.data)
       })
-    })
-    .catch(err => {
-      // 验证失败，不执行注册
-      console.log('表单验证失败:', err)
     })
 }
 </script>

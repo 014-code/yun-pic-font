@@ -33,6 +33,7 @@ import { infoUsingGet, loginUsingPost } from '@/api/user.ts'
 import { useLoginUserStore } from '@/stores/counter.ts'
 import { message } from 'ant-design-vue'
 import router from '@/router'
+import { setToken } from '@/utils/cookies.ts'
 
 //表单ref
 const formRef = ref()
@@ -83,18 +84,20 @@ function onSubmit() {
     .then(() => {
       // 验证通过后执行登录
       loginUsingPost(formState).then(res => {
-        //调用获取用户信息接口
+        // 存储token到cookies中
+        setToken(res.data)
+        // 调用获取用户信息接口
         infoUsingGet().then(res => {
-          //存储到pinia中
-          loginUser.setLoginUser(res.data.data)
+          // 存储到pinia中
+          loginUser.setLoginUser(res.data)
         })
-        message.success(res.data.msg)
+        message.success(res.msg)
         //跳转
         router.push({
           path: '/home'
         })
       }).catch(err => {
-        message.error(err.data.msg)
+        message.error(err.msg)
       })
     })
     .catch(err => {

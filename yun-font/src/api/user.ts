@@ -1,6 +1,7 @@
 // @ts-ignore
 /* eslint-disable */
 import request from '@/utils/request'
+import { getToken } from '@/utils/cookies.ts'
 
 /** 删除用户 DELETE /api/user/${param0} */
 export async function delUserUsingDelete(
@@ -12,6 +13,9 @@ export async function delUserUsingDelete(
   return request<API.ResultTUtil>(`/api/user/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
+    headers: {
+      'Authorization': getToken() || ''
+    },
     ...(options || {})
   })
 }
@@ -27,6 +31,9 @@ export async function addUserUsingPost(
     params: {
       ...params
     },
+    headers: {
+      'Authorization': getToken() || ''
+    },
     ...(options || {})
   })
 }
@@ -35,6 +42,9 @@ export async function addUserUsingPost(
 export async function cancellationUsingPost(options?: { [key: string]: any }) {
   return request<API.ResultTUtil>('/api/user/cancellation', {
     method: 'POST',
+    headers: {
+      'Authorization': getToken() || ''
+    },
     ...(options || {})
   })
 }
@@ -49,6 +59,9 @@ export async function detailUserUsingGet(
     method: 'GET',
     params: {
       ...params
+    },
+    headers: {
+      'Authorization': getToken() || ''
     },
     ...(options || {})
   })
@@ -65,6 +78,9 @@ export async function detailUserVoUsingGet(
     params: {
       ...params
     },
+    headers: {
+      'Authorization': getToken() || ''
+    },
     ...(options || {})
   })
 }
@@ -73,6 +89,9 @@ export async function detailUserVoUsingGet(
 export async function infoUsingGet(options?: { [key: string]: any }) {
   return request<API.ResultTUtilVo_>('/api/user/info', {
     method: 'GET',
+    headers: {
+      'Authorization': getToken() || ''
+    },
     ...(options || {})
   })
 }
@@ -87,6 +106,9 @@ export async function listUserUsingPost(
     method: 'POST',
     params: {
       ...params
+    },
+    headers: {
+      'Authorization': getToken() || ''
     },
     ...(options || {})
   })
@@ -105,7 +127,10 @@ export async function loginUsingPost(body: API.LoginParam, options?: { [key: str
 }
 
 /** 用户注册 POST /api/user/register */
-export async function registerUsingPost(body: API.RegisterParam, options?: { [key: string]: any }) {
+export async function registerUsingPost(
+  body: API.RegisterParam,
+  options?: { [key: string]: any }
+) {
   return request<API.ResultTUtilString_>('/api/user/register', {
     method: 'POST',
     headers: {
@@ -126,6 +151,9 @@ export async function updateUserUsingPut(
     method: 'PUT',
     params: {
       ...params
+    },
+    headers: {
+      'Authorization': getToken('token') || ''
     },
     ...(options || {})
   })

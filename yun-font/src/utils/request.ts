@@ -3,7 +3,9 @@ import {
   AxiosError
 } from 'axios'
 import type { InternalAxiosRequestConfig } from 'axios'
-import { message } from 'ant-design-vue'
+import { message, Modal } from 'ant-design-vue'
+import { removeToken } from '@/utils/cookies.ts'
+import router from '@/router'
 
 // 扩展请求配置类型
 interface RequestConfig extends InternalAxiosRequestConfig {
@@ -12,7 +14,7 @@ interface RequestConfig extends InternalAxiosRequestConfig {
 
 // 创建axios实例
 const request = axios.create({
-  baseURL: 'http://localhost:8101/api/v2/api-docs',
+  baseURL: 'http://localhost:8101',
   timeout: 10000
 })
 
@@ -52,6 +54,27 @@ request.interceptors.response.use(
   (error) => {
     if (error.response) {
       const { status, data } = error.response
+      
+      // 如果是401未授权错误，弹出确认框
+      if (status === 401) {
+        Modal.confirm({
+          title: '登录已过期',
+          content: '您的登录状态已过期，请重新登录',
+          okText: '去登录',
+          cancelText: '取消',
+          onOk() {
+            // 清除token
+            removeToken()
+            // 跳转到登录页
+            router.push('/login')
+          },
+          onCancel() {
+            // 用户选择取消，不做任何操作
+          }
+        })
+        return Promise.reject(error)
+      }
+      
       const errorMsg = data?.msg || '请求错误'
       message.error(errorMsg)
     } else {
