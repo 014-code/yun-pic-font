@@ -1,7 +1,6 @@
 // @ts-ignore
 /* eslint-disable */
 import request from '@/utils/request'
-import { getToken } from '@/utils/cookies.ts'
 
 /** 删除用户 DELETE /api/user/${param0} */
 export async function delUserUsingDelete(
@@ -13,10 +12,7 @@ export async function delUserUsingDelete(
   return request<API.ResultTUtil>(`/api/user/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
-    headers: {
-      'Authorization': getToken() || ''
-    },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -29,12 +25,9 @@ export async function addUserUsingPost(
   return request<API.ResultTUtil>('/api/user/add', {
     method: 'POST',
     params: {
-      ...params
+      ...params,
     },
-    headers: {
-      'Authorization': getToken() || ''
-    },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -42,10 +35,7 @@ export async function addUserUsingPost(
 export async function cancellationUsingPost(options?: { [key: string]: any }) {
   return request<API.ResultTUtil>('/api/user/cancellation', {
     method: 'POST',
-    headers: {
-      'Authorization': getToken() || ''
-    },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -58,12 +48,9 @@ export async function detailUserUsingGet(
   return request<API.ResultTUtilYunUser_>('/api/user/detail', {
     method: 'GET',
     params: {
-      ...params
+      ...params,
     },
-    headers: {
-      'Authorization': getToken() || ''
-    },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -76,12 +63,9 @@ export async function detailUserVoUsingGet(
   return request<API.ResultTUtilVo_>('/api/user/detail/vo', {
     method: 'GET',
     params: {
-      ...params
+      ...params,
     },
-    headers: {
-      'Authorization': getToken() || ''
-    },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -89,10 +73,7 @@ export async function detailUserVoUsingGet(
 export async function infoUsingGet(options?: { [key: string]: any }) {
   return request<API.ResultTUtilVo_>('/api/user/info', {
     method: 'GET',
-    headers: {
-      'Authorization': getToken() || ''
-    },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -105,12 +86,9 @@ export async function listUserUsingPost(
   return request<API.RowsTUtilVo_>('/api/user/list', {
     method: 'POST',
     params: {
-      ...params
+      ...params,
     },
-    headers: {
-      'Authorization': getToken() || ''
-    },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -119,10 +97,10 @@ export async function loginUsingPost(body: API.LoginParam, options?: { [key: str
   return request<API.ResultTUtilString_>('/api/user/login', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -134,10 +112,10 @@ export async function registerUsingPost(
   return request<API.ResultTUtilString_>('/api/user/register', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -150,11 +128,8 @@ export async function updateUserUsingPut(
   return request<API.ResultTUtil>('/api/user/update', {
     method: 'PUT',
     params: {
-      ...params
+      ...params,
     },
-    headers: {
-      'Authorization': getToken('token') || ''
-    },
-    ...(options || {})
+    ...(options || {}),
   })
 }

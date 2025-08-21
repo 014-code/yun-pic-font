@@ -7,6 +7,9 @@ import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import ACCESS_ENUM from '@/types/enum/accessEnum.ts'
 import NotPermission from '@/views/NotPermission.vue'
+import UploadPicView from '@/views/UploadPicView.vue'
+import PictureMagerView from '@/views/PictureMagerView.vue'
+import PicDetailView from '@/views/PicDetailView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -66,6 +69,33 @@ const routes: Array<RouteRecordRaw> = [
     component: NotPermission,
     meta: {
       access: ACCESS_ENUM.NOT_LOGIN
+    }
+  },
+  {
+    // 上传图片页
+    path: '/upload_pic/:picId?',
+    name: 'upload_pic',
+    component: UploadPicView,
+    meta: {
+      access: ACCESS_ENUM.ADMIN
+    }
+  },
+  {
+    // 图片管理页
+    path: '/picture-manger',
+    name: 'picture-manger',
+    component: PictureMagerView,
+    meta: {
+      access: ACCESS_ENUM.ADMIN
+    }
+  },
+  {
+    // 图片详情页
+    path: '/picture_detail/:picId?',
+    name: 'picture_detail',
+    component: PicDetailView,
+    meta: {
+      access: ACCESS_ENUM.USER
     }
   }
 

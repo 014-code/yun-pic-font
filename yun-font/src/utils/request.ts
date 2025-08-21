@@ -4,7 +4,7 @@ import {
 } from 'axios'
 import type { InternalAxiosRequestConfig } from 'axios'
 import { message, Modal } from 'ant-design-vue'
-import { removeToken } from '@/utils/cookies.ts'
+import { getToken, removeToken } from '@/utils/cookies.ts'
 import router from '@/router'
 
 // 扩展请求配置类型
@@ -22,6 +22,12 @@ const request = axios.create({
 request.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const typedConfig = config as RequestConfig
+
+    // 添加token到请求头
+    const token = getToken()
+    if (token) {
+      typedConfig.headers.Authorization = token
+    }
 
     // 转换page参数格式
     if (typedConfig.params?.page) {
@@ -54,7 +60,7 @@ request.interceptors.response.use(
   (error) => {
     if (error.response) {
       const { status, data } = error.response
-      
+
       // 如果是401未授权错误，弹出确认框
       if (status === 401) {
         Modal.confirm({
@@ -74,7 +80,7 @@ request.interceptors.response.use(
         })
         return Promise.reject(error)
       }
-      
+
       const errorMsg = data?.msg || '请求错误'
       message.error(errorMsg)
     } else {

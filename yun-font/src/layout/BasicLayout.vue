@@ -49,7 +49,7 @@
         </a-row>
       </a-layout-header>
       <a-layout>
-        <!--   左边菜单栏     -->
+        <!--        &lt;!&ndash;           左边菜单栏     &ndash;&gt;-->
         <!--        <a-layout-sider class="layout-sider">-->
         <!--          <a-menu-->
         <!--            id="amenu"-->
@@ -64,7 +64,7 @@
         <!--            </a-sub-menu>-->
         <!--          </a-menu>-->
         <!--        </a-layout-sider>-->
-        <!--   内容-router-view   -->
+        <!--           内容-router-view   -->
         <a-layout-content class="latout-content">
           <router-view></router-view>
         </a-layout-content>
@@ -101,9 +101,22 @@ const fullMenus: any = [
     meta: { access: ACCESS_ENUM.NOT_LOGIN }
   },
   {
+    key: '/picture-manger',
+    label: '图片管理',
+    // 仅管理员可见
+    meta: { access: ACCESS_ENUM.ADMIN }
+  },
+  {
     key: '/user-manager',
     label: '用户管理',
-    meta: { access: ACCESS_ENUM.ADMIN } // 仅管理员可见
+    // 仅管理员可见
+    meta: { access: ACCESS_ENUM.ADMIN }
+  },
+  {
+    key: '/upload_pic',
+    label: '创建图片',
+    // 仅管理员可见
+    meta: { access: ACCESS_ENUM.ADMIN }
   },
   {
     key: '/other',
@@ -199,13 +212,14 @@ function logoutLogin() {
   width: 100%;
   text-align: center;
   background-color: rgb(243, 243, 243);
-  height: 69px; // 明确设置footer高度
-  line-height: 69px; // 垂直居中
+  height: 29px; // 明确设置footer高度
+  line-height: 29px; // 垂直居中
   transform: translateY(-25px);
 }
 
 .latout-content {
   min-height: calc(100vh - 64px - 69px); // 64px是header高度，69px是footer高度
+  background-color: white;
 }
 
 </style>
