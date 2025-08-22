@@ -77,7 +77,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'upload_pic',
     component: UploadPicView,
     meta: {
-      access: ACCESS_ENUM.ADMIN
+      access: ACCESS_ENUM.USER
     }
   },
   {

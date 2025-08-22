@@ -11,9 +11,9 @@ export async function downloadUsingPost(
   return request<any>('/api/file/download', {
     method: 'POST',
     params: {
-      ...params
+      ...params,
     },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -41,10 +41,10 @@ export async function uploadUsingPost(body: {}, file?: File, options?: { [key: s
     }
   })
 
-  return request<API.ResultTUtilString>('/api/file/upload', {
+  return request<API.ResultTUtilString_>('/api/file/upload', {
     method: 'POST',
     data: formData,
     requestType: 'form',
-    ...(options || {})
+    ...(options || {}),
   })
 }

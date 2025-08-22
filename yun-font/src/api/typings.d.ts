@@ -192,6 +192,15 @@ declare namespace API {
     msg?: string
   }
 
+  type ReviewPicParam = {
+    /** 图片id */
+    picId: number
+    /** 原因 */
+    reason?: string
+    /** 状态 */
+    status: string
+  }
+
   type RowsTUtilVo_ = {
     /** 响应状态码 */
     code?: number
@@ -225,6 +234,19 @@ declare namespace API {
     total?: number
   }
 
+  type UpdatePictrueParam = {
+    /** 分类 */
+    category?: string
+    /** 简介 */
+    introduction?: string
+    /** 图片名称 */
+    name?: string
+    /** 图片id */
+    picId?: number
+    /** 标签-json */
+    tags?: string[]
+  }
+
   type updateUserUsingPUTParams = {
     account?: string
     avatar?: string
@@ -233,32 +255,6 @@ declare namespace API {
     role?: string
     userId?: number
     userName?: string
-  }
-
-  type updateUsingPUTParams = {
-    /** 分类 */
-    category?: string[]
-    /** 简介 */
-    introduction?: string
-    /** 图片名称 */
-    name?: string
-    /** 图片id */
-    picId?: number
-    /** 标签-json */
-    tags?: string[]
-  }
-
-  type updateVoUsingPUTParams = {
-    /** 分类 */
-    category?: string[]
-    /** 简介 */
-    introduction?: string
-    /** 图片名称 */
-    name?: string
-    /** 图片id */
-    picId?: number
-    /** 标签-json */
-    tags?: string[]
   }
 
   type uploadPicUsingPOSTParams = {
@@ -322,6 +318,8 @@ declare namespace API {
     picScale?: number
     picSize?: number
     picWidth?: number
+    reason?: string
+    status?: string
     tags?: string
     updateTime?: string
     url?: string
@@ -359,6 +357,10 @@ declare namespace API {
     picSize?: number
     /** 图片宽度 */
     picWidth?: number
+    /** 原因 */
+    reason?: string
+    /** 图片状态 */
+    status?: string
     /** 标签-json */
     tags?: string[]
     /** 更新时间 */

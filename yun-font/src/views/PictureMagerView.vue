@@ -43,18 +43,28 @@
         <div>图片高度：{{ record.picHeight }} px</div>
         <div>图片宽度：{{ record.picWidth }} px</div>
         <div>图片宽高比：{{ record.picScale }} px</div>
-
         <div>图片大小：{{ formatSize(record.picSize) }}</div>
       </template>
       <!--   标签   -->
       <template #tags="{ record }">
-        <div style="display: flex;">
+        <div style="display: flex; flex-wrap: wrap">
           <a-tag v-for="item in record.tags" :key="item">{{ item }}</a-tag>
+        </div>
+      </template>
+      <!--   状态   -->
+      <template #status="{ record }">
+        <div style="display: flex;">
+          <a-tag color="blue" v-if="record.status == '0'">待审核</a-tag>
+          <a-tag color="green" v-else-if="record.status == '1'">审核通过</a-tag>
+          <a-tag color="red" v-else>审核未通过</a-tag>
         </div>
       </template>
       <!--   操作   -->
       <template #operation="{ record }">
-        <div style="display: flex">
+        <div style="display: flex; flex-wrap: wrap">
+          <a-button type="link" @click="modal.picId = record.picId; modal.visible = true"
+                    v-if="record.status == '0'">审核
+          </a-button>
           <a-button type="text" @click="edit(record.picId)">编辑</a-button>
           <a-button type="primary" danger @click="delUser(record.picId)">删除</a-button>
         </div>
@@ -69,13 +79,25 @@
                     @change="handlePageChange"
                     :pageSizeOptions="[5, 10, 20, 30]" />
     </div>
+    <!--  弹出框  -->
+    <a-modal v-model:visible="modal.visible" title="操作">
+      <a-form-item label="原因">
+        <a-input v-model:value="modal.reason" property="请输入原因"></a-input>
+      </a-form-item>
+      <template #footer>
+        <div style="display: flex; text-align: center">
+          <a-button @click="review('1')">通过</a-button>
+          <a-button @click="review('2')">不通过</a-button>
+        </div>
+      </template>
+    </a-modal>
   </div>
 </template>
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue'
 import { message } from 'ant-design-vue'
 import { useForm } from 'ant-design-vue/es/form'
-import { allTagsUsingGet, delUsingDelete, listUsingPost } from '@/api/picture.ts'
+import { allTagsUsingGet, delUsingDelete, listUsingPost, reviewUsingPut } from '@/api/picture.ts'
 import router from '@/router'
 import { formatSize } from '../common'
 
@@ -114,6 +136,11 @@ const columns = [
     slots: { customRender: 'picInfo' }
   },
   {
+    title: '状态',
+    dataIndex: 'status',
+    slots: { customRender: 'status' }
+  },
+  {
     title: '用户 id',
     dataIndex: 'userId',
     width: 80
@@ -132,6 +159,15 @@ const columns = [
     slots: { customRender: 'operation' }
   }
 ]
+
+//弹出框数据
+const modal = reactive({
+  visible: false,
+  reason: undefined,
+  // status: undefined
+  //当前选择图片id
+  picId: 0
+})
 
 // 表格中数据
 const data = ref([])
@@ -178,12 +214,34 @@ function getTags() {
   })
 }
 
+/**
+ * 编辑图片
+ * @param picId
+ */
 function edit(picId: number) {
   //todo 跳转到图片上传页，并回显数据
   router.push({
     path: `/upload_pic`,
     query: { picId }
   })
+}
+
+/**
+ * 审核图片
+ * @param picId
+ */
+function review(status: string) {
+  //请求
+  const { picId, reason } = modal
+  reviewUsingPut({ picId, reason, status }).then(res => {
+    message.success(res.msg)
+  }).catch(err => {
+    message.error(err.msg)
+  })
+  //关闭弹窗
+  modal.visible = false
+  //更新列表数据
+  getTableList()
 }
 
 /**
