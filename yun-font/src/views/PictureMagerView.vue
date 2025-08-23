@@ -240,6 +240,8 @@ function review(status: string) {
   })
   //关闭弹窗
   modal.visible = false
+  //清空输入框
+  modal.reason = undefined
   //更新列表数据
   getTableList()
 }

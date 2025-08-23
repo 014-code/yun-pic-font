@@ -7,9 +7,11 @@ import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import ACCESS_ENUM from '@/types/enum/accessEnum.ts'
 import NotPermission from '@/views/NotPermission.vue'
-import UploadPicView from '@/views/UploadPicView.vue'
+import UploadPicView from '@/component/UploadPicView.vue'
 import PictureMagerView from '@/views/PictureMagerView.vue'
 import PicDetailView from '@/views/PicDetailView.vue'
+import UrlPicView from '@/component/UrlPicView.vue'
+import CreatePictureView from '@/views/CreatePictureView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -75,7 +77,7 @@ const routes: Array<RouteRecordRaw> = [
     // 上传图片页
     path: '/upload_pic/:picId?',
     name: 'upload_pic',
-    component: UploadPicView,
+    component: CreatePictureView,
     meta: {
       access: ACCESS_ENUM.USER
     }
@@ -97,7 +99,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       access: ACCESS_ENUM.USER
     }
-  }
+  },
 
 ]
 

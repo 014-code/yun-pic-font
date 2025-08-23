@@ -12,7 +12,7 @@ export async function delUsingDelete(
   return request<API.ResultTUtil>(`/api/yunPicture/del/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -25,9 +25,9 @@ export async function detailUsingGet(
   return request<API.ResultTUtilYunPictureUserVo_>('/api/yunPicture/detail', {
     method: 'GET',
     params: {
-      ...params
+      ...params,
     },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -40,9 +40,9 @@ export async function detailVoUsingGet(
   return request<API.ResultTUtilYunPictureUserVos_>('/api/yunPicture/detail/vo', {
     method: 'GET',
     params: {
-      ...params
+      ...params,
     },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -55,9 +55,9 @@ export async function listUsingPost(
   return request<API.RowsTUtilYunPicture_>('/api/yunPicture/list', {
     method: 'POST',
     params: {
-      ...params
+      ...params,
     },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -70,9 +70,9 @@ export async function listVoUsingPost(
   return request<API.RowsTUtilYunPictureVo_>('/api/yunPicture/list/vo', {
     method: 'POST',
     params: {
-      ...params
+      ...params,
     },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -81,10 +81,10 @@ export async function reviewUsingPut(body: API.ReviewPicParam, options?: { [key:
   return request<API.ResultTUtil>('/api/yunPicture/review', {
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -92,7 +92,7 @@ export async function reviewUsingPut(body: API.ReviewPicParam, options?: { [key:
 export async function allTagsUsingGet(options?: { [key: string]: any }) {
   return request<API.ResultTUtilYunCategoryTagVo_>('/api/yunPicture/tags/all', {
     method: 'GET',
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -104,10 +104,10 @@ export async function updateUsingPut(
   return request<API.ResultTUtil>('/api/yunPicture/update', {
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -119,10 +119,10 @@ export async function updateVoUsingPut(
   return request<API.ResultTUtil>('/api/yunPicture/update/vo', {
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -159,10 +159,25 @@ export async function uploadPicUsingPost(
   return request<API.ResultTUtilYunPictureVo_>('/api/yunPicture/uploadPic', {
     method: 'POST',
     params: {
-      ...params
+      ...params,
     },
     data: formData,
     requestType: 'form',
-    ...(options || {})
+    ...(options || {}),
+  })
+}
+
+/** url上传图片(并返回图片信息) POST /api/yunPicture/uploadPic/url */
+export async function uploadPicUrlUsingPost(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.uploadPicUrlUsingPOSTParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.ResultTUtilYunPictureVo_>('/api/yunPicture/uploadPic/url', {
+    method: 'POST',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
   })
 }

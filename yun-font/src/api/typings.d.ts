@@ -257,19 +257,14 @@ declare namespace API {
     userName?: string
   }
 
+  type uploadPicUrlUsingPOSTParams = {
+    /** file */
+    file?: string
+    /** picId */
+    picId?: number
+  }
+
   type uploadPicUsingPOSTParams = {
-    account?: string
-    avatar?: string
-    createBy?: string
-    createTime?: string
-    delFlag?: string
-    password?: string
-    profile?: string
-    role?: string
-    updateBy?: string
-    updateTime?: string
-    userId?: number
-    userName?: string
     /** picId */
     picId?: number
   }
@@ -319,6 +314,7 @@ declare namespace API {
     picSize?: number
     picWidth?: number
     reason?: string
+    reviewId?: number
     status?: string
     tags?: string
     updateTime?: string
@@ -359,6 +355,8 @@ declare namespace API {
     picWidth?: number
     /** 原因 */
     reason?: string
+    /** 审核人id */
+    reviewId?: number
     /** 图片状态 */
     status?: string
     /** 标签-json */

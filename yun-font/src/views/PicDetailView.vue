@@ -3,7 +3,7 @@
     <a-row :gutter="[16,16]">
       <!--图片展示区-->
       <a-col :sm="24" :md="16" :xl="18">
-        <a-card title="图片预览">
+        <a-card title="图片预览" style="text-align: center">
           <a-image
             style="max-height:600px; object-fit: contain"
             :src="picture.url"
