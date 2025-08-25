@@ -3,12 +3,13 @@
     <!--  上传  -->
     <a-input-group compact>
       <a-input v-model:value="url" style="width: calc(100% - 200px)" />
-      <a-button type="primary" :loading="loading" @click="urlUpload()" style="width: 200px">上传</a-button>
+      <a-button type="primary" :loading="loading" @click="urlUpload()" style="width: 200px">上传
+      </a-button>
     </a-input-group>
     <div v-if="picture || picId">
       <!--   图片   -->
-      <div style="text-align: center" >
-        <a-image :width="200" :src="picture.url"/>
+      <div style="text-align: center">
+        <a-image :width="200" :src="picture.url" />
       </div>
       <!--  下方输入表单  -->
       <a-form :model="formState" style="margin-top: 30px">
@@ -17,7 +18,8 @@
         </a-form-item>
         <a-space></a-space>
         <a-form-item label="简介">
-          <a-input v-model:value="formState.introduction" type="textarea" placeholder="请输入简介"></a-input>
+          <a-input v-model:value="formState.introduction" type="textarea"
+                   placeholder="请输入简介"></a-input>
         </a-form-item>
         <a-space></a-space>
         <a-form-item label="分类">
@@ -60,7 +62,7 @@ const picture = ref<API.YunPictureVo>()
 //url
 const url = ref('')
 //加载状态
-const loading = ref<Boolean>(false);
+const loading = ref<Boolean>(false)
 //所有分类信息
 const categoryList = ref([])
 //所有标签信息
@@ -95,46 +97,22 @@ function getTags() {
 function urlUpload() {
   loading.value = true
   uploadPicUrlUsingPost({ file: url.value }).then(res => {
-      // 设置完整的图片信息
-      picture.value = {
-        url: res.data.url,
-        picId: res.data.picId
-      }
-      // 设置表单默认值
-      formState.name = res.data.name || ''
-      formState.introduction = res.data.introduction || ''
-      formState.category = res.data.category || ''
-      formState.tags = res.data.tags || []
-      message.success('图片上传成功！')
+    // 设置完整的图片信息
+    picture.value = {
+      url: res.data.url,
+      picId: res.data.picId
+    }
+    // 设置表单默认值
+    formState.name = res.data.name || ''
+    formState.introduction = res.data.introduction || ''
+    formState.category = res.data.category || ''
+    formState.tags = res.data.tags || []
+    message.success('图片上传成功！')
   }).catch(err => {
     message.error(err.msg)
+  }).finally(() => {
+    loading.value = false
   })
-  loading.value = false
-}
-
-/**
- * 查询图片详情-如果参数上面有id则进行查
- */
-function getDetail() {
-  const picId = route.query.picId
-  if (picId && typeof picId === 'string') {
-    detailUsingGet({ picId: Number(picId) }).then(res => {
-      if (res.data && res.data.yunPicture) {
-        formState.name = res.data.yunPicture.name
-        formState.introduction = res.data.yunPicture.introduction
-        formState.category = res.data.yunPicture.category
-        formState.tags = JSON.parse(res.data.yunPicture.tags || '[]')
-        // 创建一个新的对象并赋值给 picture.value 以触发重新渲染
-        picture.value = {
-          ...res.data.yunPicture,
-          url: res.data.yunPicture.url
-        }
-        console.log(picture.value.url)
-      }
-    }).catch(err => {
-      message.error('获取图片详情失败')
-    })
-  }
 }
 
 /**
@@ -160,7 +138,7 @@ function submit() {
     //执行跳转到图片详情页面
     //todo 图片详情页面和主页进入图片详情一样
     router.push({
-      path: `/picture-manger`,
+      path: `/picture-manger`
     })
   }).catch(err => {
     message.error('修改失败')
@@ -169,9 +147,6 @@ function submit() {
 
 onMounted(() => {
   getTags()
-  if (picId != null) {
-    getDetail()
-  }
 })
 
 </script>

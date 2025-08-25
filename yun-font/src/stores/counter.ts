@@ -21,5 +21,12 @@ export const useLoginUserStore = defineStore('loginUser', () => {
     loginUser.value = newLoginUser
   }
 
-  return { loginUser, setLoginUser, fetchLoginUser }
+  /**
+   * 清空用户信息
+   */
+  function cleanUser() {
+    loginUser.value = null
+  }
+
+  return { loginUser, setLoginUser, fetchLoginUser, cleanUser }
 })

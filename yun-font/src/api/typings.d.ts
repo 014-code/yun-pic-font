@@ -8,6 +8,27 @@ declare namespace API {
     userName?: string
   }
 
+  type captureUsingPOSTParams = {
+    /** 抓取数量 */
+    num?: number
+    /** 图片前缀(名称) */
+    prefix?: string
+    /** 搜索词 */
+    text?: string
+    account?: string
+    avatar?: string
+    createBy?: string
+    createTime?: string
+    delFlag?: string
+    password?: string
+    profile?: string
+    role?: string
+    updateBy?: string
+    updateTime?: string
+    userId?: number
+    userName?: string
+  }
+
   type delUserUsingDELETEParams = {
     /** userId */
     userId: number

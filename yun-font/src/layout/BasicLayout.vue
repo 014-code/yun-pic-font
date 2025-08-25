@@ -173,7 +173,8 @@ function logoutLogin() {
     removeToken()
     // 清空pinia里面的用户数据
     loginUserStore.setLoginUser(null)
-    console.log(loginUserStore.loginUser)
+    //重新获取用户信息
+    loginUserStore.cleanUser()
     // 跳转到登录页
     router.push('/login')
   }).catch((error) => {

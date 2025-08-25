@@ -31,6 +31,10 @@
           重置
         </a-button>
       </a-form-item>
+      <div style="position: absolute; right: 0; margin-right: 30px">
+        <a-button type="primary" style="margin-right: 20px" @click="toCreate()">创建图片</a-button>
+        <a-button type="primary" @click="toCapture()">批量创建图片</a-button>
+      </div>
     </a-form>
     <a-table :columns="columns" :data-source="data" :pagination="false">
       <!--   图片   -->
@@ -86,8 +90,8 @@
       </a-form-item>
       <template #footer>
         <div style="display: flex; text-align: center">
-          <a-button @click="review('1')">通过</a-button>
-          <a-button @click="review('2')">不通过</a-button>
+          <a-button type="primary" @click="review('1')">通过</a-button>
+          <a-button danger type="primary" @click="review('2')">不通过</a-button>
         </div>
       </template>
     </a-modal>
@@ -215,6 +219,21 @@ function getTags() {
 }
 
 /**
+ * 跳转至创建图片
+ */
+function toCreate() {
+  router.push('/upload_pic')
+}
+
+/**
+ * 跳转至批量抓取图片
+ */
+function toCapture() {
+  router.push('/capture_pic')
+}
+
+
+/**
  * 编辑图片
  * @param picId
  */
@@ -235,15 +254,15 @@ function review(status: string) {
   const { picId, reason } = modal
   reviewUsingPut({ picId, reason, status }).then(res => {
     message.success(res.msg)
+    //关闭弹窗
+    modal.visible = false
+    //清空输入框
+    modal.reason = undefined
+    //更新列表数据
+    getTableList()
   }).catch(err => {
     message.error(err.msg)
   })
-  //关闭弹窗
-  modal.visible = false
-  //清空输入框
-  modal.reason = undefined
-  //更新列表数据
-  getTableList()
 }
 
 /**
@@ -275,8 +294,8 @@ function getTableList() {
  */
 function delUser(pictureId: number) {
   delUsingDelete({ picId: pictureId }).then(res => {
-    getTableList()
     message.success(res.data.msg)
+    getTableList()
   }).catch(err => {
     message.error(err.data.msg)
   })

@@ -2,6 +2,21 @@
 /* eslint-disable */
 import request from '@/utils/request'
 
+/** 批量抓取图片 POST /api/yunPicture/capture */
+export async function captureUsingPost(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  data: API.captureUsingPOSTParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.ResultTUtil>('/api/yunPicture/capture', {
+    method: 'POST',
+    data: {
+      ...data,
+    },
+    ...(options || {}),
+  })
+}
+
 /** 删除图片-管理员 DELETE /api/yunPicture/del/${param0} */
 export async function delUsingDelete(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

@@ -12,6 +12,7 @@ import PictureMagerView from '@/views/PictureMagerView.vue'
 import PicDetailView from '@/views/PicDetailView.vue'
 import UrlPicView from '@/component/UrlPicView.vue'
 import CreatePictureView from '@/views/CreatePictureView.vue'
+import CapturePicView from '@/views/CapturePicView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -65,7 +66,7 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    // 401无权限界面-todo使用ant的无权限界面实现
+    // 403无权限界面-todo使用ant的无权限界面实现
     path: '/notpermission',
     name: 'notpermission',
     component: NotPermission,
@@ -100,6 +101,15 @@ const routes: Array<RouteRecordRaw> = [
       access: ACCESS_ENUM.USER
     }
   },
+  {
+    // 批量抓取图片页
+    path: '/capture_pic',
+    name: 'capture_pic',
+    component: CapturePicView,
+    meta: {
+      access: ACCESS_ENUM.ADMIN
+    }
+  }
 
 ]
 
