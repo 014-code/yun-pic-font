@@ -24,7 +24,8 @@
         <a-list-item style="padding: 0">
           <a-card :title="item.name" class="home-card" @click="toDetail(item.picId)">
             <template #cover>
-              <img style="height: 180px; object-fit: cover" alt="example" :src="item.url" />
+              <img style="height: 180px; object-fit: cover" alt="图片损坏"
+                   :src="item.thumbnailUrl ?? item.url" loading="lazy" />
             </template>
             <div>
               <div>{{ item.category }}</div>
