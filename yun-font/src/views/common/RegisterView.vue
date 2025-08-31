@@ -35,10 +35,11 @@
 </template>
 <script lang="ts" setup>
 import { defineComponent, reactive, ref, toRaw } from 'vue'
-import { infoUsingGet, registerUsingPost } from '@/api/user.ts'
+import { info, register } from '@/api/user.ts'
 import { useLoginUserStore } from '@/stores/counter.ts'
 import { message } from 'ant-design-vue'
 import router from '@/router'
+import { setToken } from '@/utils/cookies.ts'
 
 //表单ref
 const formRef = ref()
@@ -102,13 +103,13 @@ function onSubmit() {
     .validate()
     .then(() => {
       // 验证通过后执行注册
-      registerUsingPost(formState).then(res => {
+      register(formState).then(res => {
         message.success(res.msg)
         // 注册成功后自动登录
         // 存储token到cookies中
         setToken(res.data)
         // 调用获取用户信息接口
-        infoUsingGet().then(res => {
+        info().then(res => {
           // 存储到pinia中
           registerUser.setLoginUser(res.data)
           // 跳转到首页

@@ -15,8 +15,7 @@
           </a-col>
           <a-col flex="auto">
             <!--    中间导航栏    -->
-            <a-menu v-model:selectedKeys="current" mode="horizontal" @click="menuClick"
-                    :items="visibleMenus">
+            <a-menu v-model:selectedKeys="current" mode="horizontal" @click="menuClick" :items="visibleMenus">
             </a-menu>
           </a-col>
           <a-col flex="200px">
@@ -39,7 +38,7 @@
               </a-dropdown>
               <a-tag v-if="loginUserStore.loginUser.role" color="blue" style="margin-left: 10px">
                 <div v-if="loginUserStore.loginUser.role === 'admin'">{{ '管理员' }}</div>
-                <div v-else="loginUserStore.loginUser.role === 'admin'">{{ '用户' }}</div>
+                <div v-else>{{ '用户' }}</div>
               </a-tag>
             </template>
             <template v-else>
@@ -49,24 +48,12 @@
         </a-row>
       </a-layout-header>
       <a-layout>
-        <!--        &lt;!&ndash;           左边菜单栏     &ndash;&gt;-->
-        <!--        <a-layout-sider class="layout-sider">-->
-        <!--          <a-menu-->
-        <!--            id="amenu"-->
-        <!--            style="width: 100%"-->
-        <!--            v-model:openKeys="openKeys"-->
-        <!--            v-model:selectedKeys="selectedKeys"-->
-        <!--            mode="inline"-->
-        <!--            @click="handleClick"-->
-        <!--          >-->
-        <!--            <a-sub-menu key="sub1" @titleClick="titleClick">-->
-        <!--              <template #title>菜单</template>-->
-        <!--            </a-sub-menu>-->
-        <!--          </a-menu>-->
-        <!--        </a-layout-sider>-->
-        <!--           内容-router-view   -->
         <a-layout-content class="latout-content">
-          <router-view></router-view>
+          <!--    左边菜单栏    -->
+          <div v-if="loginUserStore.loginUser.userName">
+            <Menu></Menu>
+          </div>
+          <router-view style="width: 100%;"></router-view>
         </a-layout-content>
       </a-layout>
       <!--   底部关于我   -->
@@ -85,10 +72,11 @@ import router from '@/router'
 import { useRouter } from 'vue-router'
 import { AntDesignOutlined } from '@ant-design/icons-vue'
 import { useLoginUserStore } from '@/stores/counter.ts'
-import { cancellationUsingPost } from '@/api/user.ts'
+import { cancellation } from '@/api/user.ts'
 import { removeToken } from '@/utils/cookies.ts'
 import ACCESS_ENUM from '@/types/enum/accessEnum.ts'
 import checkAccess from '@/common/checkAccess.ts'
+import Menu from '@/component/Menu.vue'
 //当前选中菜单
 const current = ref<string[]>(['home'])
 //从pinia里面拿取到的用户信息
@@ -109,6 +97,12 @@ const fullMenus: any = [
   {
     key: '/user-manager',
     label: '用户管理',
+    // 仅管理员可见
+    meta: { access: ACCESS_ENUM.ADMIN }
+  },
+  {
+    key: '/space-manger',
+    label: '空间管理',
     // 仅管理员可见
     meta: { access: ACCESS_ENUM.ADMIN }
   },
@@ -168,7 +162,7 @@ const visibleMenus = computed(() => {
  */
 function logoutLogin() {
   // 调用后端注销接口
-  cancellationUsingPost().then(() => {
+  cancellation().then(() => {
     // 移除cookie中的token
     removeToken()
     // 清空pinia里面的用户数据
@@ -219,8 +213,8 @@ function logoutLogin() {
 }
 
 .latout-content {
-  min-height: calc(100vh - 64px - 69px); // 64px是header高度，69px是footer高度
+  //min-height: calc(100vh - 64px - 69px); // 64px是header高度，69px是footer高度
   background-color: white;
+  display: flex;
 }
-
 </style>

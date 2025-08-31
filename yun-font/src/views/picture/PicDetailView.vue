@@ -1,13 +1,10 @@
 <template>
   <div style="margin: 30px">
-    <a-row :gutter="[16,16]">
+    <a-row :gutter="[16, 16]">
       <!--图片展示区-->
       <a-col :sm="24" :md="16" :xl="18">
         <a-card title="图片预览" style="text-align: center">
-          <a-image
-            style="max-height:600px; object-fit: contain"
-            :src="picture.url"
-          />
+          <a-image style="max-height:600px; object-fit: contain" :src="picture.url" />
         </a-card>
       </a-col>
       <!--图片信息区-->
@@ -69,7 +66,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { delUsingDelete, detailUsingGet, detailVoUsingGet, updateUsingPut } from '@/api/picture.ts'
+import { del, detail, detailVo, update } from '@/api/picture.ts'
 import { useRoute } from 'vue-router'
 import { downloadImage, formatSize } from '@/common'
 import { useLoginUserStore } from '@/stores/counter.ts'
@@ -99,7 +96,7 @@ const canEdit = computed(() => {
  * 删除方法
  */
 function doDel() {
-  delUsingDelete(picture.value.picId).then(res => {
+  del(picture.value.picId).then(res => {
     message.success(res.msg)
     // 跳转
     router.push('/home')
@@ -120,10 +117,11 @@ function doDownload() {
  */
 function doEdit() {
   const picId = picture.value.picId
+  const spaceId = route.query.spaceId
   //跳转至编辑页
   router.push({
     path: `/upload_pic`,
-    query: { picId }
+    query: { picId, spaceId }
   })
 }
 
@@ -132,7 +130,7 @@ function doEdit() {
  */
 function getDetail() {
   const picId = route.query.picId as number
-  detailVoUsingGet({picId}).then(res => {
+  detailVo({ picId }).then(res => {
     picture.value = res.data.yunPicture
     userPic.value = res.data.yunUser
   })
@@ -144,6 +142,4 @@ onMounted(() => {
 
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

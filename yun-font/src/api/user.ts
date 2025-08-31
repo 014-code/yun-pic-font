@@ -2,99 +2,23 @@
 /* eslint-disable */
 import request from '@/utils/request'
 
-/** 删除用户 DELETE /api/user/${param0} */
-export async function delUserUsingDelete(
+/** 删除用户 DELETE /user/${param0} */
+export async function delUser(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.delUserUsingDELETEParams,
+  params: API.delUserParams,
   options?: { [key: string]: any }
 ) {
   const { userId: param0, ...queryParams } = params
-  return request<API.ResultTUtil>(`/api/user/${param0}`, {
+  return request<API.ResultTUtil>(`/user/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
   })
 }
 
-/** 创建用户 POST /api/user/add */
-export async function addUserUsingPost(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.addUserUsingPOSTParams,
-  options?: { [key: string]: any }
-) {
-  return request<API.ResultTUtil>('/api/user/add', {
-    method: 'POST',
-    params: {
-      ...params,
-    },
-    ...(options || {}),
-  })
-}
-
-/** 注销用户 POST /api/user/cancellation */
-export async function cancellationUsingPost(options?: { [key: string]: any }) {
-  return request<API.ResultTUtil>('/api/user/cancellation', {
-    method: 'POST',
-    ...(options || {}),
-  })
-}
-
-/** 查询用户详情/未脱敏 GET /api/user/detail */
-export async function detailUserUsingGet(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.detailUserUsingGETParams,
-  options?: { [key: string]: any }
-) {
-  return request<API.ResultTUtilYunUser_>('/api/user/detail', {
-    method: 'GET',
-    params: {
-      ...params,
-    },
-    ...(options || {}),
-  })
-}
-
-/** 查询用户详情/脱敏 GET /api/user/detail/vo */
-export async function detailUserVoUsingGet(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.detailUserVoUsingGETParams,
-  options?: { [key: string]: any }
-) {
-  return request<API.ResultTUtilVo_>('/api/user/detail/vo', {
-    method: 'GET',
-    params: {
-      ...params,
-    },
-    ...(options || {}),
-  })
-}
-
-/** 获取当前用户信息 GET /api/user/info */
-export async function infoUsingGet(options?: { [key: string]: any }) {
-  return request<API.ResultTUtilVo_>('/api/user/info', {
-    method: 'GET',
-    ...(options || {}),
-  })
-}
-
-/** 获取用户列表 POST /api/user/list */
-export async function listUserUsingPost(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.listUserUsingPOSTParams,
-  options?: { [key: string]: any }
-) {
-  return request<API.RowsTUtilVo_>('/api/user/list', {
-    method: 'POST',
-    params: {
-      ...params,
-    },
-    ...(options || {}),
-  })
-}
-
-/** 用户登录 POST /api/user/login */
-export async function loginUsingPost(body: API.LoginParam, options?: { [key: string]: any }) {
-  return request<API.ResultTUtilString_>('/api/user/login', {
+/** 创建用户 POST /user/add */
+export async function addUser(body: API.AddYunUserParam, options?: { [key: string]: any }) {
+  return request<API.ResultTUtil>('/user/add', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -104,12 +28,55 @@ export async function loginUsingPost(body: API.LoginParam, options?: { [key: str
   })
 }
 
-/** 用户注册 POST /api/user/register */
-export async function registerUsingPost(
-  body: API.RegisterParam,
+/** 注销用户 POST /user/cancellation */
+export async function cancellation(options?: { [key: string]: any }) {
+  return request<API.ResultTUtil>('/user/cancellation', {
+    method: 'POST',
+    ...(options || {}),
+  })
+}
+
+/** 查询用户详情/未脱敏 GET /user/detail */
+export async function detailUser(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.detailUserParams,
   options?: { [key: string]: any }
 ) {
-  return request<API.ResultTUtilString_>('/api/user/register', {
+  return request<API.ResultTUtil>('/user/detail', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  })
+}
+
+/** 查询用户详情/脱敏 GET /user/detail/vo */
+export async function detailUserVo(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.detailUserVoParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.ResultTUtil>('/user/detail/vo', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  })
+}
+
+/** 获取当前用户信息 GET /user/info */
+export async function info(options?: { [key: string]: any }) {
+  return request<API.ResultTUtil>('/user/info', {
+    method: 'GET',
+    ...(options || {}),
+  })
+}
+
+/** 获取用户列表 POST /user/list */
+export async function listUser(body: API.GetUserListParam, options?: { [key: string]: any }) {
+  return request<API.RowsTUtil>('/user/list', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -119,17 +86,38 @@ export async function registerUsingPost(
   })
 }
 
-/** 修改用户 PUT /api/user/update */
-export async function updateUserUsingPut(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateUserUsingPUTParams,
-  options?: { [key: string]: any }
-) {
-  return request<API.ResultTUtil>('/api/user/update', {
+/** 用户登录 POST /user/login */
+export async function login(body: API.LoginParam, options?: { [key: string]: any }) {
+  return request<API.ResultTUtil>('/user/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
+/** 用户注册 POST /user/register */
+export async function register(body: API.RegisterParam, options?: { [key: string]: any }) {
+  return request<API.ResultTUtil>('/user/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
+/** 修改用户 PUT /user/update */
+export async function updateUser(body: API.UpdateYunUserParam, options?: { [key: string]: any }) {
+  return request<API.ResultTUtil>('/user/update', {
     method: 'PUT',
-    params: {
-      ...params,
+    headers: {
+      'Content-Type': 'application/json',
     },
+    data: body,
     ...(options || {}),
   })
 }

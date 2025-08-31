@@ -1,18 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
-import HomeView from '@/views/HomeView.vue'
+import HomeView from '@/views/common/HomeView.vue'
 import OtherView from '@/views/OtherView.vue'
-import UserMagerView from '@/views/UserMagerView.vue'
-import LoginView from '@/views/LoginView.vue'
-import RegisterView from '@/views/RegisterView.vue'
+import UserMagerView from '@/views/user/UserMagerView.vue'
+import LoginView from '@/views/common/LoginView.vue'
+import RegisterView from '@/views/common/RegisterView.vue'
 import ACCESS_ENUM from '@/types/enum/accessEnum.ts'
-import NotPermission from '@/views/NotPermission.vue'
-import UploadPicView from '@/component/UploadPicView.vue'
-import PictureMagerView from '@/views/PictureMagerView.vue'
-import PicDetailView from '@/views/PicDetailView.vue'
-import UrlPicView from '@/component/UrlPicView.vue'
-import CreatePictureView from '@/views/CreatePictureView.vue'
-import CapturePicView from '@/views/CapturePicView.vue'
+import NotPermission from '@/views/common/NotPermission.vue'
+import UploadPicView from '@/component/UploadPic.vue'
+import PictureMagerView from '@/views/picture/PictureMagerView.vue'
+import PicDetailView from '@/views/picture/PicDetailView.vue'
+import UrlPicView from '@/component/UrlPic.vue'
+import CreatePictureView from '@/views/picture/CreatePictureView.vue'
+import CapturePicView from '@/views/picture/CapturePicView.vue'
+import SpaceMagerView from '@/views/space/SpaceMagerView.vue'
+import CreateSpaceView from '@/views/space/CreateSpaceView.vue'
+import MineSpaceView from '@/views/space/MineSpaceView.vue'
+import SpaceDetailView from '@/views/space/SpaceDetailView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -76,7 +80,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     // 上传图片页
-    path: '/upload_pic/:picId?',
+    path: '/upload_pic',
     name: 'upload_pic',
     component: CreatePictureView,
     meta: {
@@ -106,6 +110,42 @@ const routes: Array<RouteRecordRaw> = [
     path: '/capture_pic',
     name: 'capture_pic',
     component: CapturePicView,
+    meta: {
+      access: ACCESS_ENUM.ADMIN
+    }
+  },
+  {
+    // 空间管理页
+    path: '/space-manger',
+    name: 'space-manger',
+    component: SpaceMagerView,
+    meta: {
+      access: ACCESS_ENUM.ADMIN
+    }
+  },
+  {
+    // 创建空间页
+    path: '/create_space',
+    name: 'create_space',
+    component: CreateSpaceView,
+    meta: {
+      access: ACCESS_ENUM.USER
+    }
+  },
+  {
+    // 我的空间页
+    path: '/mine_space',
+    name: 'mine_space',
+    component: MineSpaceView,
+    meta: {
+      access: ACCESS_ENUM.ADMIN
+    }
+  },
+  {
+    // 空间详情页
+    path: '/detail_space/:spaceId?',
+    name: 'detail_space',
+    component: SpaceDetailView,
     meta: {
       access: ACCESS_ENUM.ADMIN
     }

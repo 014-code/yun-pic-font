@@ -33,7 +33,7 @@
 <script setup lang="ts">
 
 import { reactive, ref } from 'vue'
-import { captureUsingPost } from '@/api/picture.ts'
+import { capture } from '@/api/picture.ts'
 import { useLoginUserStore } from '@/stores/counter.ts'
 import { message } from 'ant-design-vue'
 import router from '@/router'
@@ -53,7 +53,7 @@ const user = useLoginUserStore()
 function submit() {
   loading.value = true
   const userInfo = user.loginUser
-  captureUsingPost({ ...formState, yunUser: userInfo })
+  capture({ ...formState, yunUser: userInfo })
     .then(res => {
       message.success(res.msg)
       router.push('/home')

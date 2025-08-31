@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
-import { allTagsUsingGet, listVoUsingPost } from '@/api/picture.ts'
+import { allTags, listVo } from '@/api/picture.ts'
 import { message } from 'ant-design-vue'
 import router from '@/router'
 import ACCESS_ENUM from '@/types/enum/accessEnum.ts'
@@ -107,7 +107,7 @@ function menuClick({ key }: { key: string }, type: string) {
   const { pageNum, pageSize } = formPage
   const params = { pageNum, pageSize, ...formState }
   console.log('API参数:', params)
-  listVoUsingPost(params).then(res => {
+  listVo(params).then(res => {
     picData.value = res.rows
     formPage.total = res.total
   }).catch(err => {
@@ -122,7 +122,7 @@ function onSearch() {
   const { pageNum, pageSize } = formPage
   const params = { pageNum, pageSize, ...formState }
   console.log('API参数:', params)
-  listVoUsingPost(params).then(res => {
+  listVo(params).then(res => {
     picData.value = res.rows
     formPage.total = res.total
   }).catch(err => {
@@ -137,7 +137,7 @@ function getPicList() {
   const { pageNum, pageSize } = formPage
   const params = { pageNum, pageSize, ...formState }
   console.log('API参数:', params)
-  listVoUsingPost(params).then(res => {
+  listVo(params).then(res => {
     picData.value = res.rows
     formPage.total = res.total
   }).catch(err => {
@@ -169,7 +169,7 @@ function handlePageChange(page: number, pageSize: number) {
  * 获取所有标签
  */
 function getTags() {
-  allTagsUsingGet().then(res => {
+  allTags().then(res => {
     console.log('API返回数据:', res)
     if (res.data.category) {
       console.log('分类数据:', res.data.category)

@@ -16,8 +16,8 @@
 <script setup lang="ts">
 //选择菜单
 import { ref } from 'vue'
-import UploadPicView from '@/component/UploadPicView.vue'
-import UrlPicView from '@/component/UrlPicView.vue'
+import UploadPicView from '@/component/UploadPic.vue'
+import UrlPicView from '@/component/UrlPic.vue'
 
 const activeKey = ref('pic');
 

@@ -2,42 +2,39 @@
 /* eslint-disable */
 import request from '@/utils/request'
 
-/** 批量抓取图片 POST /api/yunPicture/capture */
-export async function captureUsingPost(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  data: API.captureUsingPOSTParams,
-  options?: { [key: string]: any }
-) {
-  return request<API.ResultTUtil>('/api/yunPicture/capture', {
+/** 批量抓取图片 POST /yunPicture/capture */
+export async function capture(body: API.CaptureParam, options?: { [key: string]: any }) {
+  return request<API.ResultTUtil>('/yunPicture/capture', {
     method: 'POST',
-    data: {
-      ...data,
+    headers: {
+      'Content-Type': 'application/json',
     },
+    data: body,
     ...(options || {}),
   })
 }
 
-/** 删除图片-管理员 DELETE /api/yunPicture/del/${param0} */
-export async function delUsingDelete(
+/** 删除图片-管理员 DELETE /yunPicture/del/${param0} */
+export async function del(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.delUsingDELETEParams,
+  params: API.delParams,
   options?: { [key: string]: any }
 ) {
   const { picId: param0, ...queryParams } = params
-  return request<API.ResultTUtil>(`/api/yunPicture/del/${param0}`, {
+  return request<API.ResultTUtil>(`/yunPicture/del/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
   })
 }
 
-/** 查询图片详情-管理员 GET /api/yunPicture/detail */
-export async function detailUsingGet(
+/** 查询图片详情-管理员 GET /yunPicture/detail */
+export async function detail(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.detailUsingGETParams,
+  params: API.detailParams,
   options?: { [key: string]: any }
 ) {
-  return request<API.ResultTUtilYunPictureUserVo_>('/api/yunPicture/detail', {
+  return request<API.ResultTUtil>('/yunPicture/detail', {
     method: 'GET',
     params: {
       ...params,
@@ -46,13 +43,13 @@ export async function detailUsingGet(
   })
 }
 
-/** 查询图片详情 GET /api/yunPicture/detail/vo */
-export async function detailVoUsingGet(
+/** 查询图片详情 GET /yunPicture/detail/vo */
+export async function detailVo(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.detailVoUsingGETParams,
+  params: API.detailVoParams,
   options?: { [key: string]: any }
 ) {
-  return request<API.ResultTUtilYunPictureUserVos_>('/api/yunPicture/detail/vo', {
+  return request<API.ResultTUtil>('/yunPicture/detail/vo', {
     method: 'GET',
     params: {
       ...params,
@@ -61,39 +58,39 @@ export async function detailVoUsingGet(
   })
 }
 
-/** 分页查询图片列表-管理员 POST /api/yunPicture/list */
-export async function listUsingPost(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.listUsingPOSTParams,
-  options?: { [key: string]: any }
-) {
-  return request<API.RowsTUtilYunPicture_>('/api/yunPicture/list', {
+/** 分页查询图片列表-管理员 POST /yunPicture/list */
+export async function list(body: API.GetPictrueListParam, options?: { [key: string]: any }) {
+  return request<API.RowsTUtil>('/yunPicture/list', {
     method: 'POST',
-    params: {
-      ...params,
+    headers: {
+      'Content-Type': 'application/json',
     },
+    data: body,
     ...(options || {}),
   })
 }
 
-/** 分页获取图片 POST /api/yunPicture/list/vo */
-export async function listVoUsingPost(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.listVoUsingPOSTParams,
+/** 分页获取图片 POST /yunPicture/list/vo */
+export async function listVo(
+  body: {
+    getPictrueListParam?: API.GetPictrueListParam
+    pageInfoParam?: API.PageInfoParam
+  },
   options?: { [key: string]: any }
 ) {
-  return request<API.RowsTUtilYunPictureVo_>('/api/yunPicture/list/vo', {
+  return request<API.RowsTUtil>('/yunPicture/list/vo', {
     method: 'POST',
-    params: {
-      ...params,
+    headers: {
+      'Content-Type': 'application/json',
     },
+    data: body,
     ...(options || {}),
   })
 }
 
-/** 审核图片 PUT /api/yunPicture/review */
-export async function reviewUsingPut(body: API.ReviewPicParam, options?: { [key: string]: any }) {
-  return request<API.ResultTUtil>('/api/yunPicture/review', {
+/** 审核图片 PUT /yunPicture/review */
+export async function review(body: API.ReviewPicParam, options?: { [key: string]: any }) {
+  return request<API.ResultTUtil>('/yunPicture/review', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -103,20 +100,17 @@ export async function reviewUsingPut(body: API.ReviewPicParam, options?: { [key:
   })
 }
 
-/** 查询所有标签和类别 GET /api/yunPicture/tags/all */
-export async function allTagsUsingGet(options?: { [key: string]: any }) {
-  return request<API.ResultTUtilYunCategoryTagVo_>('/api/yunPicture/tags/all', {
+/** 查询所有标签和类别 GET /yunPicture/tags/all */
+export async function allTags(options?: { [key: string]: any }) {
+  return request<API.ResultTUtil>('/yunPicture/tags/all', {
     method: 'GET',
     ...(options || {}),
   })
 }
 
-/** 更新图片信息-管理员 PUT /api/yunPicture/update */
-export async function updateUsingPut(
-  body: API.UpdatePictrueParam,
-  options?: { [key: string]: any }
-) {
-  return request<API.ResultTUtil>('/api/yunPicture/update', {
+/** 更新图片信息-管理员 PUT /yunPicture/update */
+export async function update(body: API.UpdatePictrueParam, options?: { [key: string]: any }) {
+  return request<API.ResultTUtil>('/yunPicture/update', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -126,12 +120,9 @@ export async function updateUsingPut(
   })
 }
 
-/** 修改图片 PUT /api/yunPicture/update/vo */
-export async function updateVoUsingPut(
-  body: API.UpdatePictrueParam,
-  options?: { [key: string]: any }
-) {
-  return request<API.ResultTUtil>('/api/yunPicture/update/vo', {
+/** 修改图片 PUT /yunPicture/update/vo */
+export async function updateVo(body: API.UpdatePictrueParam, options?: { [key: string]: any }) {
+  return request<API.ResultTUtil>('/yunPicture/update/vo', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -141,54 +132,28 @@ export async function updateVoUsingPut(
   })
 }
 
-/** 上传图片(并返回图片信息) POST /api/yunPicture/uploadPic */
-export async function uploadPicUsingPost(
+/** 上传图片(并返回图片信息) POST /yunPicture/uploadPic */
+export async function uploadPic(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.uploadPicUsingPOSTParams,
-  body: {},
-  file?: File,
+  params: API.uploadPicParams,
   options?: { [key: string]: any }
 ) {
-  const formData = new FormData()
-
-  if (file) {
-    formData.append('file', file)
-  }
-
-  Object.keys(body).forEach((ele) => {
-    const item = (body as any)[ele]
-
-    if (item !== undefined && item !== null) {
-      if (typeof item === 'object' && !(item instanceof File)) {
-        if (item instanceof Array) {
-          item.forEach((f) => formData.append(ele, f || ''))
-        } else {
-          formData.append(ele, JSON.stringify(item))
-        }
-      } else {
-        formData.append(ele, item)
-      }
-    }
-  })
-
-  return request<API.ResultTUtilYunPictureVo_>('/api/yunPicture/uploadPic', {
+  return request<API.ResultTUtil>('/yunPicture/uploadPic', {
     method: 'POST',
     params: {
       ...params,
     },
-    data: formData,
-    requestType: 'form',
     ...(options || {}),
   })
 }
 
-/** url上传图片(并返回图片信息) POST /api/yunPicture/uploadPic/url */
-export async function uploadPicUrlUsingPost(
+/** url上传图片(并返回图片信息) POST /yunPicture/uploadPic/url */
+export async function uploadPicUrl(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.uploadPicUrlUsingPOSTParams,
+  params: API.uploadPicUrlParams,
   options?: { [key: string]: any }
 ) {
-  return request<API.ResultTUtilYunPictureVo_>('/api/yunPicture/uploadPic/url', {
+  return request<API.ResultTUtil>('/yunPicture/uploadPic/url', {
     method: 'POST',
     params: {
       ...params,

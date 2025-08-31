@@ -1,8 +1,17 @@
 <template>
   <div class="upload-pic">
     <!--  上传  -->
-    <PicUpload :picture="picture" :on-success="onSuccess"></PicUpload>
+    <h1>根据URL上传图片</h1>
+    <a-input-group compact>
+      <a-input v-model:value="url" style="width: calc(100% - 200px)" />
+      <a-button type="primary" :loading="loading" @click="urlUpload()" style="width: 200px">上传
+      </a-button>
+    </a-input-group>
     <div v-if="picture || picId">
+      <!--   图片   -->
+      <div style="text-align: center">
+        <a-image :width="200" :src="picture.url" />
+      </div>
       <!--  下方输入表单  -->
       <a-form :model="formState" style="margin-top: 30px">
         <a-form-item label="名称">
@@ -41,40 +50,41 @@
 import { onMounted, reactive, ref } from 'vue'
 import PicUpload from '@/component/PicUpload.vue'
 import { message } from 'ant-design-vue'
-import { allTagsUsingGet, detailUsingGet, updateUsingPut } from '@/api/picture.ts'
+import {
+  allTags,
+  detail,
+  update,
+  uploadPicUrl
+} from '@/api/picture.ts'
 import { useRoute } from 'vue-router'
 import router from '@/router'
 //图片信息
 const picture = ref<API.YunPictureVo>()
+//url
+const url = ref('')
+//加载状态
+const loading = ref<Boolean>(false)
 //所有分类信息
 const categoryList = ref([])
 //所有标签信息
 const tagsList = ref([])
 //表单
 const formState = reactive({
-  name: undefined,
-  introduction: undefined,
-  category: undefined,
-  tags: undefined
+  name: '' as string | undefined,
+  introduction: '' as string | undefined,
+  category: '' as string | undefined,
+  tags: [] as string[] | undefined
 })
 
 const route = useRoute()
 
 const picId = route.query.picId
-/**
- * 加载图片
- */
-function onSuccess(newPicture: API.YunPictureVo) {
-  picture.value = newPicture
-  //填充默认名称
-  formState.name = newPicture.name
-}
 
 /**
  * 获取所有标签
  */
 function getTags() {
-  allTagsUsingGet().then(res => {
+  allTags().then(res => {
     categoryList.value = res.data.category
     tagsList.value = res.data.tags
   }).catch(err => {
@@ -83,23 +93,26 @@ function getTags() {
 }
 
 /**
- * 查询图片详情-如果参数上面有id则进行查
+ * url上传图片
  */
-function getDetail() {
-  const picId = route.query.picId
-  detailUsingGet({picId}).then(res => {
-    formState.name = res.data.yunPicture.name
-    formState.introduction = res.data.yunPicture.introduction
-    formState.category = res.data.yunPicture.category
-    formState.tags = JSON.parse(res.data.yunPicture.tags)
-    // 创建一个新的对象并赋值给 picture.value 以触发重新渲染
+function urlUpload() {
+  loading.value = true
+  uploadPicUrl({ file: url.value }).then(res => {
+    // 设置完整的图片信息
     picture.value = {
-      ...res.data.yunPicture,
-      url: res.data.yunPicture.url
+      url: res.data.url,
+      picId: res.data.picId
     }
-    console.log(picture.value.url)
+    // 设置表单默认值
+    formState.name = res.data.name || ''
+    formState.introduction = res.data.introduction || ''
+    formState.category = res.data.category || ''
+    formState.tags = res.data.tags || []
+    message.success('图片上传成功！')
   }).catch(err => {
-    message.error('获取图片详情失败')
+    message.error(err.msg)
+  }).finally(() => {
+    loading.value = false
   })
 }
 
@@ -117,7 +130,7 @@ function submit() {
   }
 
   //提交请求
-  updateUsingPut(params, {
+  update(params, {
     headers: {
       'Content-Type': 'application/json'
     }
@@ -126,7 +139,7 @@ function submit() {
     //执行跳转到图片详情页面
     //todo 图片详情页面和主页进入图片详情一样
     router.push({
-      path: `/picture-manger`,
+      path: `/picture-manger`
     })
   }).catch(err => {
     message.error('修改失败')
@@ -135,14 +148,11 @@ function submit() {
 
 onMounted(() => {
   getTags()
-  if (picId != null) {
-    getDetail()
-  }
 })
 
 </script>
 <style>
 .upload-pic {
-  padding: 70px;
+  padding: 50px 70px 70px 70px;
 }
 </style>

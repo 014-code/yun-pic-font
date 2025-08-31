@@ -1,8 +1,7 @@
 <template>
   <div id="picture-mager">
     <!--  上方表单  -->
-    <a-form layout="inline" :model="formState" style="margin-bottom: 30px" :pagination="false"
-            bordered>
+    <a-form layout="inline" :model="formState" style="margin-bottom: 30px" :pagination="false" bordered>
       <a-form-item>
         <a-input v-model:value="formState.name" placeholder="请输入名称">
         </a-input>
@@ -66,8 +65,7 @@
       <!--   操作   -->
       <template #operation="{ record }">
         <div style="display: flex; flex-wrap: wrap">
-          <a-button type="link" @click="modal.picId = record.picId; modal.visible = true"
-                    v-if="record.status == '0'">审核
+          <a-button type="link" @click="modal.picId = record.picId; modal.visible = true" v-if="record.status == '0'">审核
           </a-button>
           <a-button type="text" @click="edit(record.picId)">编辑</a-button>
           <a-button type="primary" danger @click="delUser(record.picId)">删除</a-button>
@@ -77,11 +75,9 @@
     <div style="display: flex; margin-top: 30px">
       <!-- 总条数显示 -->
       <span class="total-text" style="margin-top: 8px">共 {{ formPage.total }} 条</span>
-      <a-pagination :show-size-changer="true" v-model:current="formPage.pageNum"
-                    :total="formPage.total"
-                    :pageSize="formPage.pageSize" @showSizeChange="onShowSizeChange"
-                    @change="handlePageChange"
-                    :pageSizeOptions="[5, 10, 20, 30]" />
+      <a-pagination :show-size-changer="true" v-model:current="formPage.pageNum" :total="formPage.total"
+        :pageSize="formPage.pageSize" @showSizeChange="onShowSizeChange" @change="handlePageChange"
+        :pageSizeOptions="[5, 10, 20, 30]" />
     </div>
     <!--  弹出框  -->
     <a-modal v-model:visible="modal.visible" title="操作">
@@ -90,8 +86,8 @@
       </a-form-item>
       <template #footer>
         <div style="display: flex; text-align: center">
-          <a-button type="primary" @click="review('1')">通过</a-button>
-          <a-button danger type="primary" @click="review('2')">不通过</a-button>
+          <a-button type="primary" @click="reviewPic('1')">通过</a-button>
+          <a-button danger type="primary" @click="reviewPic('2')">不通过</a-button>
         </div>
       </template>
     </a-modal>
@@ -101,9 +97,9 @@
 import { onMounted, reactive, ref } from 'vue'
 import { message } from 'ant-design-vue'
 import { useForm } from 'ant-design-vue/es/form'
-import { allTagsUsingGet, delUsingDelete, listUsingPost, reviewUsingPut } from '@/api/picture.ts'
+import { allTags, del, list, review } from '@/api/picture.ts'
 import router from '@/router'
-import { formatSize } from '../common'
+import { formatSize } from '../../common'
 
 // 列数据
 const columns = [
@@ -209,7 +205,7 @@ onMounted(() => {
  * 获取所有标签
  */
 function getTags() {
-  allTagsUsingGet().then(res => {
+  allTags().then(res => {
     categoryList.value = res.data.category
     tagsList.value = res.data.tags
     console.log(tagsList.value)
@@ -239,9 +235,13 @@ function toCapture() {
  */
 function edit(picId: number) {
   //todo 跳转到图片上传页，并回显数据
+  // 从图片数据中获取spaceId
+  const picture = data.value.find(item => item.picId === picId)
+  const spaceId = picture?.spaceId
+
   router.push({
     path: `/upload_pic`,
-    query: { picId }
+    query: { picId, spaceId }
   })
 }
 
@@ -249,10 +249,10 @@ function edit(picId: number) {
  * 审核图片
  * @param picId
  */
-function review(status: string) {
+function reviewPic(status: string) {
   //请求
   const { picId, reason } = modal
-  reviewUsingPut({ picId, reason, status }).then(res => {
+  review({ picId, reason, status }).then(res => {
     message.success(res.msg)
     //关闭弹窗
     modal.visible = false
@@ -270,7 +270,7 @@ function review(status: string) {
  */
 function getTableList() {
   const { pageNum, pageSize } = formPage
-  listUsingPost({
+  list({
     ...formState,
     pageNum,
     pageSize
@@ -293,7 +293,7 @@ function getTableList() {
  * 删除图片方法
  */
 function delUser(pictureId: number) {
-  delUsingDelete({ picId: pictureId }).then(res => {
+  del({ picId: pictureId }).then(res => {
     message.success(res.data.msg)
     getTableList()
   }).catch(err => {

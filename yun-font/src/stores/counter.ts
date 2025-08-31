@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { infoUsingGet } from '@/api/user.ts'
+import { info } from '@/api/user.ts'
 import { message } from 'ant-design-vue'
 
 export const useLoginUserStore = defineStore('loginUser', () => {
@@ -12,7 +12,7 @@ export const useLoginUserStore = defineStore('loginUser', () => {
    * 接口请求
    */
   async function fetchLoginUser() {
-    infoUsingGet().then(res => {
+    info().then(res => {
       loginUser.value = res.data
     }).catch(err => {
       message.error(err.msg ?? "获取用户信息失败")

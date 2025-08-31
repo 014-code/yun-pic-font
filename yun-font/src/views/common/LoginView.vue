@@ -29,7 +29,7 @@
 </template>
 <script lang="ts" setup>
 import { defineComponent, reactive, ref, toRaw } from 'vue'
-import { infoUsingGet, loginUsingPost } from '@/api/user.ts'
+import { info, login } from '@/api/user.ts'
 import { useLoginUserStore } from '@/stores/counter.ts'
 import { message } from 'ant-design-vue'
 import router from '@/router'
@@ -83,11 +83,11 @@ function onSubmit() {
     .validate()
     .then(() => {
       // 验证通过后执行登录
-      loginUsingPost(formState).then(res => {
+      login(formState).then(res => {
         // 存储token到cookies中
         setToken(res.data)
         // 调用获取用户信息接口
-        infoUsingGet().then(res => {
+        info().then(res => {
           // 存储到pinia中
           loginUser.setLoginUser(res.data)
         })

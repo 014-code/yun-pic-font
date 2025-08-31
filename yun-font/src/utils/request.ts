@@ -14,7 +14,7 @@ interface RequestConfig extends InternalAxiosRequestConfig {
 
 // 创建axios实例
 const request = axios.create({
-  baseURL: 'http://localhost:8101',
+  baseURL: 'http://localhost:8101/api',
   timeout: 10000
 })
 

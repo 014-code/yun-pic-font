@@ -58,7 +58,7 @@
       <!--   操作   -->
       <template #operation="{ record }">
         <div>
-          <a-button type="primary" danger @click="delUser(record.userId)">删除</a-button>
+          <a-button type="primary" danger @click="delUsers(record.userId)">删除</a-button>
         </div>
       </template>
     </a-table>
@@ -79,7 +79,7 @@
 </template>
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue'
-import { delUserUsingDelete, listUserUsingPost } from '@/api/user.ts'
+import { delUser, listUser } from '@/api/user.ts'
 import { message } from 'ant-design-vue'
 import { useForm } from 'ant-design-vue/es/form'
 
@@ -151,7 +151,7 @@ onMounted(() => {
 function getTableList() {
   const { pageNum, pageSize } = formPage
 
-  listUserUsingPost({
+  listUser({
     ...formState,
     pageNum,
     pageSize
@@ -166,9 +166,9 @@ function getTableList() {
 /**
  * 删除用户方法
  */
-function delUser(userId: number) {
+function delUsers(userId: number) {
   console.log(userId)
-  delUserUsingDelete({ userId }).then(res => {
+  delUser({ userId }).then(res => {
     getTableList()
     message.success(res.data.msg)
   }).catch(err => {

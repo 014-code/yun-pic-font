@@ -1,6 +1,6 @@
 <template>
   <div class="picture-upload">
-    <a-upload name="avatar" list-type="picture-card" class="avatar-uploader" :custom-request="uploadPic"
+    <a-upload name="avatar" list-type="picture-card" class="avatar-uploader" :custom-request="uploadPicture"
       :before-upload="beforeUpload" :show-upload-list="false">
       <img v-if="props.picture" :src="getImgUrl(props.picture.url)" alt="avatar" />
       <div v-else style="margin-top: 30px">
@@ -15,7 +15,7 @@
 import { PlusOutlined, LoadingOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import { defineComponent, ref } from 'vue'
-import { uploadPicUsingPost } from '../api/picture'
+import { uploadPic } from '../api/picture'
 import { useLoginUserStore } from '../stores/counter'
 
 interface Props {
@@ -65,7 +65,7 @@ const beforeUpload = (file: FileItem) => {
 /**
  * 上传图片
  */
-function uploadPic(options: any) {
+function uploadPicture(options: any) {
   const { file, onSuccess, onError } = options
   loading.value = true
   //将上传成功的图片信息返回给父组件
@@ -73,7 +73,7 @@ function uploadPic(options: any) {
   const params = props.picture ? { picId: props.picture.picId } : {}
   const userParam = loginUserStore.loginUser
   const realFile = (file && (file as any).originFileObj) ? (file as any).originFileObj : file
-  uploadPicUsingPost(params, { yunUser: userParam }, realFile).then((res: any) => {
+  uploadPic(params, { yunUser: userParam }, realFile).then((res: any) => {
     message.success(res.msg || '上传成功')
     //将上传成功的图片信息返回给父组件
     props.onSuccess && props.onSuccess(res.data as any)
