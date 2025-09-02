@@ -17,6 +17,7 @@ import SpaceMagerView from '@/views/space/SpaceMagerView.vue'
 import CreateSpaceView from '@/views/space/CreateSpaceView.vue'
 import MineSpaceView from '@/views/space/MineSpaceView.vue'
 import SpaceDetailView from '@/views/space/SpaceDetailView.vue'
+import PicSearchView from '@/views/picture/PicSearchView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -146,6 +147,15 @@ const routes: Array<RouteRecordRaw> = [
     path: '/detail_space/:spaceId?',
     name: 'detail_space',
     component: SpaceDetailView,
+    meta: {
+      access: ACCESS_ENUM.ADMIN
+    }
+  },
+  {
+    // 以图搜图界面
+    path: '/pic_search/:picId?',
+    name: 'pic_search',
+    component: PicSearchView,
     meta: {
       access: ACCESS_ENUM.ADMIN
     }

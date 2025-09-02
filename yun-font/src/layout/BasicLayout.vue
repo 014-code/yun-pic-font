@@ -15,7 +15,8 @@
           </a-col>
           <a-col flex="auto">
             <!--    中间导航栏    -->
-            <a-menu v-model:selectedKeys="current" mode="horizontal" @click="menuClick" :items="visibleMenus">
+            <a-menu v-model:selectedKeys="current" mode="horizontal" @click="menuClick"
+                    :items="visibleMenus">
             </a-menu>
           </a-col>
           <a-col flex="200px">

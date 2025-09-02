@@ -31,6 +31,10 @@
               <div>{{ item.category }}</div>
               <a-tag v-for="tag in item.tags" :key="tag" color="green">{{ tag }}</a-tag>
             </div>
+            <!--      操作选项     -->
+            <template #actions>
+              <div @click.stop="picSearch(item.picId)">以图搜图</div>
+            </template>
           </a-card>
         </a-list-item>
       </template>
@@ -152,6 +156,18 @@ function getPicList() {
 function toDetail(picId: number) {
   router.push({
     path: 'picture_detail',
+    query: { picId }
+  })
+}
+
+/**
+ * 跳转以图搜图
+ * @param picId
+ */
+function picSearch(picId: number) {
+  //跳转至以图搜图界面
+  router.push({
+    path: '/pic_search',
     query: { picId }
   })
 }

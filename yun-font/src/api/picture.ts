@@ -71,13 +71,7 @@ export async function list(body: API.GetPictrueListParam, options?: { [key: stri
 }
 
 /** 分页获取图片 POST /yunPicture/list/vo */
-export async function listVo(
-  body: {
-    getPictrueListParam?: API.GetPictrueListParam
-    pageInfoParam?: API.PageInfoParam
-  },
-  options?: { [key: string]: any }
-) {
+export async function listVo(body: API.GetPictrueListParam, options?: { [key: string]: any }) {
   return request<API.RowsTUtil>('/yunPicture/list/vo', {
     method: 'POST',
     headers: {
@@ -96,6 +90,21 @@ export async function review(body: API.ReviewPicParam, options?: { [key: string]
       'Content-Type': 'application/json',
     },
     data: body,
+    ...(options || {}),
+  })
+}
+
+/** 以图搜图 GET /yunPicture/search */
+export async function search(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.searchParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.ResultTUtil>('/yunPicture/search', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
     ...(options || {}),
   })
 }

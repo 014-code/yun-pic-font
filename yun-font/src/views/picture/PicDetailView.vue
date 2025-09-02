@@ -76,7 +76,7 @@ import router from '@/router'
 //图片信息
 const picture = ref<API.YunPictureVo>({})
 //图片的用户信息
-const userPic = ref<API.Vo_>({})
+const userPic = ref<API.YunUser>({})
 //当前id
 const route = useRoute()
 //当前用户

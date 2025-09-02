@@ -1,40 +1,15 @@
 <template>
   <div id="picture-mager">
     <!--  上方表单  -->
-    <a-form layout="inline" :model="formState" style="margin-bottom: 30px" :pagination="false" bordered>
-      <a-form-item>
-        <a-input v-model:value="formState.name" placeholder="请输入名称">
-        </a-input>
-      </a-form-item>
-      <a-form-item>
-        <a-input v-model:value="formState.introduction" placeholder="请输入简介">
-        </a-input>
-      </a-form-item>
-      <a-form-item label="分类">
-        <a-select v-model:value="formState.category" placeholder="请选择分类">
-          <a-select-option v-for="item in categoryList" :key="item" :value="item">{{ item }}
-          </a-select-option>
-        </a-select>
-      </a-form-item>
-      <a-form-item label="标签" placeholder="请选择标签">
-        <a-select mode="tags" v-model:value="formState.tags">
-          <a-select-option v-for="item in tagsList" :key="item" :value="item">{{ item }}
-          </a-select-option>
-        </a-select>
-      </a-form-item>
-      <a-form-item>
-        <a-button type="primary" html-type="submit" @click="submit()" style="margin-right: 20px">
-          搜索
-        </a-button>
-        <a-button html-type="submit" @click="reset()">
-          重置
-        </a-button>
-      </a-form-item>
+    <div>
+      <!--   搜索表单组件   -->
+      <SearchForm
+        :on-search="(formState: API.GetPictrueListParam) => { searchFormState = formState; getTableList(formState); }"></SearchForm>
       <div style="position: absolute; right: 0; margin-right: 30px">
         <a-button type="primary" style="margin-right: 20px" @click="toCreate()">创建图片</a-button>
         <a-button type="primary" @click="toCapture()">批量创建图片</a-button>
       </div>
-    </a-form>
+    </div>
     <a-table :columns="columns" :data-source="data" :pagination="false">
       <!--   图片   -->
       <template #url="{ record }">
@@ -65,7 +40,8 @@
       <!--   操作   -->
       <template #operation="{ record }">
         <div style="display: flex; flex-wrap: wrap">
-          <a-button type="link" @click="modal.picId = record.picId; modal.visible = true" v-if="record.status == '0'">审核
+          <a-button type="link" @click="modal.picId = record.picId; modal.visible = true"
+                    v-if="record.status == '0'">审核
           </a-button>
           <a-button type="text" @click="edit(record.picId)">编辑</a-button>
           <a-button type="primary" danger @click="delUser(record.picId)">删除</a-button>
@@ -75,9 +51,11 @@
     <div style="display: flex; margin-top: 30px">
       <!-- 总条数显示 -->
       <span class="total-text" style="margin-top: 8px">共 {{ formPage.total }} 条</span>
-      <a-pagination :show-size-changer="true" v-model:current="formPage.pageNum" :total="formPage.total"
-        :pageSize="formPage.pageSize" @showSizeChange="onShowSizeChange" @change="handlePageChange"
-        :pageSizeOptions="[5, 10, 20, 30]" />
+      <a-pagination :show-size-changer="true" v-model:current="formPage.pageNum"
+                    :total="formPage.total"
+                    :pageSize="formPage.pageSize" @showSizeChange="onShowSizeChange"
+                    @change="handlePageChange"
+                    :pageSizeOptions="[5, 10, 20, 30]" />
     </div>
     <!--  弹出框  -->
     <a-modal v-model:visible="modal.visible" title="操作">
@@ -100,6 +78,7 @@ import { useForm } from 'ant-design-vue/es/form'
 import { allTags, del, list, review } from '@/api/picture.ts'
 import router from '@/router'
 import { formatSize } from '../../common'
+import SearchForm from '@/component/SearchForm.vue'
 
 // 列数据
 const columns = [
@@ -160,6 +139,9 @@ const columns = [
   }
 ]
 
+//子组件的搜索表单记录-是触发搜索过后获得的-其实不需要搞实时的
+const searchFormState = reactive<API.GetPictrueListParam>({})
+
 //弹出框数据
 const modal = reactive({
   visible: false,
@@ -178,41 +160,10 @@ const formPage = reactive({
   total: 0
 })
 
-/**
- * 搜索表单
- */
-const formState = reactive({
-  name: undefined,
-  introduction: undefined,
-  category: undefined,
-  tags: undefined
-})
-
-const { resetFields, validate, validateInfos, mergeValidateInfo } = useForm(formState, undefined)
-
-//所有分类信息
-const categoryList = ref([])
-//所有标签信息
-const tagsList = ref([])
-
 onMounted(() => {
   //获取图片列表信息
-  getTableList()
-  getTags()
+  getTableList(searchFormState)
 })
-
-/**
- * 获取所有标签
- */
-function getTags() {
-  allTags().then(res => {
-    categoryList.value = res.data.category
-    tagsList.value = res.data.tags
-    console.log(tagsList.value)
-  }).catch(err => {
-    message.error('获取标签和类别失败')
-  })
-}
 
 /**
  * 跳转至创建图片
@@ -259,7 +210,7 @@ function reviewPic(status: string) {
     //清空输入框
     modal.reason = undefined
     //更新列表数据
-    getTableList()
+    getTableList(searchFormState)
   }).catch(err => {
     message.error(err.msg)
   })
@@ -268,7 +219,7 @@ function reviewPic(status: string) {
 /**
  * 获取图片表格数据
  */
-function getTableList() {
+function getTableList(formState: API.GetPictrueListParam) {
   const { pageNum, pageSize } = formPage
   list({
     ...formState,
@@ -295,7 +246,7 @@ function getTableList() {
 function delUser(pictureId: number) {
   del({ picId: pictureId }).then(res => {
     message.success(res.data.msg)
-    getTableList()
+    getTableList(searchFormState)
   }).catch(err => {
     message.error(err.data.msg)
   })
@@ -305,7 +256,7 @@ function delUser(pictureId: number) {
 const onShowSizeChange = (current: number, size: number) => {
   formPage.pageNum = 1 // 重置到第一页
   formPage.pageSize = size
-  getTableList()
+  getTableList(searchFormState)
 }
 
 /**
@@ -314,25 +265,9 @@ const onShowSizeChange = (current: number, size: number) => {
 function handlePageChange(page: number, pageSize: number) {
   formPage.pageNum = page
   formPage.pageSize = pageSize
-  getTableList()
+  getTableList(searchFormState)
 }
 
-
-/**
- * 提交搜索表单
- */
-function submit() {
-  getTableList()
-}
-
-/**
- * 重置表单
- */
-function reset() {
-  resetFields()
-  //重新请求
-  getTableList()
-}
 </script>
 
 <style lang="scss">
