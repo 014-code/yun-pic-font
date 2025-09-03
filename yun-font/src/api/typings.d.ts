@@ -12,81 +12,6 @@ declare namespace API {
     userId?: number
   }
 
-  type YunPictureVo = {
-    /**
-     * 图片id
-     */
-    picId?: number;
-    /**
-     * 图片地址
-     */
-    url?: string;
-    /**
-     * 图片名称
-     */
-    name?: string;
-    /**
-     * 简介
-     */
-    introduction?: string;
-    /**
-     * 分类
-     */
-    category?: string;
-    /**
-     * 标签-json
-     */
-    tags?: string[];
-    /**
-     * 图片体积
-     */
-    picSize?: number;
-    /**
-     * 图片宽度
-     */
-    picWidth?: number;
-    /**
-     * 图片高度
-     */
-    picHeight?: number;
-    /**
-     * 图片宽高比
-     */
-    picScale?: string;
-    /**
-     * 图片格式
-     */
-    picFormat?: string;
-    /**
-     * 图片状态
-     */
-    status?: string;
-    /**
-     * 缩略图url
-     */
-    thumbnailUrl?: string;
-    /**
-     * 原因
-     */
-    reason?: string;
-    /**
-     * 创建用户
-     */
-    userId?: number;
-    /**
-     * 审核人id
-     */
-    reviewId?: number;
-    /**
-     * 创建时间
-     */
-    createTime?: string;
-    /**
-     * 更新时间
-     */
-    updateTime?: string;
-  }
-
   type AddYunUserParam = {
     userName?: string
     account?: string
@@ -244,6 +169,11 @@ declare namespace API {
     rows?: YunSpace[]
     /** 总记录数 */
     total?: number
+  }
+
+  type searchByColorParams = {
+    spaceId: number
+    color: string
   }
 
   type searchParams = {

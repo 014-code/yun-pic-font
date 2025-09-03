@@ -109,6 +109,21 @@ export async function search(
   })
 }
 
+/** 颜色搜图 GET /yunPicture/search/color */
+export async function searchByColor(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.searchByColorParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.ResultTUtil>('/yunPicture/search/color', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  })
+}
+
 /** 查询所有标签和类别 GET /yunPicture/tags/all */
 export async function allTags(options?: { [key: string]: any }) {
   return request<API.ResultTUtil>('/yunPicture/tags/all', {

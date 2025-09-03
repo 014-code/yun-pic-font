@@ -19,6 +19,10 @@
                   :on-search="(formState: API.GetPictrueListParam) => { searchFormState = formState; getPicList(formState); }">
       </SearchForm>
     </a-space>
+    <!-- 按颜色搜索 -->
+    <a-form-item label="按颜色搜索" style="margin-top: 16px">
+      <color-picker format="hex" @pureColorChange="onColorChange" />
+    </a-form-item>
     <a-list :grid="{ gutter: 16, xs: 1, sm: 2, md: 4, lg: 4, xl: 6 }" :data-source="picData"
             style="margin-top: 80px;">
       <template #renderItem="{ item }">
@@ -35,6 +39,7 @@
             </div>
             <!--      操作选项     -->
             <template #actions>
+              <div @click.stop="share(item.url)">分享</div>
               <div @click.stop="picSearch(item.picId)">以图搜图</div>
               <div @click.stop="edit(item.picId)">修改</div>
               <div @click.stop="deletePic(item.picId)">删除</div>
@@ -43,23 +48,27 @@
         </a-list-item>
       </template>
     </a-list>
+    <!--  分享弹窗组件  -->
+    <Share ref="shareRef" :title="'分享图片'" :link="picUrl"></Share>
     <!--  图片总数  -->
     <span>图片总数 {{ spaceDetail.totalCount }} / {{ spaceDetail.maxCount }}</span>
-    <a-pagination :show-size-changer="false" v-model:current="formPage.pageNum"
+    <a-pagination :show-size-changer=" false
+          " v-model:current="formPage.pageNum"
                   :total="formPage.total"
                   :pageSize="formPage.pageSize" @change="handlePageChange" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue'
-import { allTags, del, listVo, search } from '@/api/picture.ts'
+import { computed, nextTick, onMounted, reactive, ref } from 'vue'
+import { allTags, del, listVo, search, searchByColor } from '@/api/picture.ts'
 import { message } from 'ant-design-vue'
 import router from '@/router'
 import ACCESS_ENUM from '@/types/enum/accessEnum.ts'
 import { useRoute } from 'vue-router'
 import { detail } from '@/api/space.ts'
 import SearchForm from '@/component/SearchForm.vue'
+import Share from '@/component/Share.vue'
 //图片数据
 const picData = ref([])
 //空间详情
@@ -74,6 +83,12 @@ const formPage = reactive({
   pageSize: 30,
   total: 0
 })
+
+//弹窗ref
+const shareRef = ref()
+
+//选中分享的图片地址
+const picUrl = ref<string>('')
 
 function getListVo() {
   const { pageNum, pageSize } = formPage
@@ -127,6 +142,33 @@ function edit(picId: number) {
   router.push({
     path: `/upload_pic`,
     query: { picId, spaceId }
+  })
+}
+
+/**
+ * 颜色改变时搜索
+ */
+function onColorChange(color: string) {
+  const spaceId = spaceDetail.value.spaceId
+  //调用颜色搜索接口
+  searchByColor({ spaceId, color }).then(res => {
+    picData.value = res.data
+  }).catch(err => {
+    message.error('颜色搜索失败' + err.msg)
+  })
+}
+
+/**
+ * 分享图片方法
+ */
+function share(url: string) {
+  //传值给url
+  picUrl.value = url
+  console.log('啦啦啦啦啦啦啦啦啦啦')
+  nextTick(() => {
+    if (shareRef.value) {
+      shareRef.value.openModel()
+    }
   })
 }
 
