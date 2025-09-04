@@ -21,6 +21,19 @@ declare namespace API {
     profile?: string
   }
 
+  type BatchPicParam = {
+    /** 图片ids */
+    picIds?: number[]
+    /** 空间id */
+    spaceId?: number
+    /** 标签 */
+    tags?: string[]
+    /** 分类 */
+    category?: string
+    /** 命名规则 */
+    nameRole?: string
+  }
+
   type CaptureParam = {
     /** 搜索词 */
     text?: string

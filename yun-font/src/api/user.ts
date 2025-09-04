@@ -12,7 +12,7 @@ export async function delUser(
   return request<API.ResultTUtil>(`/user/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -21,10 +21,10 @@ export async function addUser(body: API.AddYunUserParam, options?: { [key: strin
   return request<API.ResultTUtil>('/user/add', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -32,7 +32,7 @@ export async function addUser(body: API.AddYunUserParam, options?: { [key: strin
 export async function cancellation(options?: { [key: string]: any }) {
   return request<API.ResultTUtil>('/user/cancellation', {
     method: 'POST',
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -45,9 +45,9 @@ export async function detailUser(
   return request<API.ResultTUtil>('/user/detail', {
     method: 'GET',
     params: {
-      ...params
+      ...params,
     },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -60,9 +60,9 @@ export async function detailUserVo(
   return request<API.ResultTUtil>('/user/detail/vo', {
     method: 'GET',
     params: {
-      ...params
+      ...params,
     },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -70,7 +70,7 @@ export async function detailUserVo(
 export async function info(options?: { [key: string]: any }) {
   return request<API.ResultTUtil>('/user/info', {
     method: 'GET',
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -79,10 +79,10 @@ export async function listUser(body: API.GetUserListParam, options?: { [key: str
   return request<API.RowsTUtil>('/user/list', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -91,10 +91,10 @@ export async function login(body: API.LoginParam, options?: { [key: string]: any
   return request<API.ResultTUtil>('/user/login', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -103,10 +103,10 @@ export async function register(body: API.RegisterParam, options?: { [key: string
   return request<API.ResultTUtil>('/user/register', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -115,9 +115,9 @@ export async function updateUser(body: API.UpdateYunUserParam, options?: { [key:
   return request<API.ResultTUtil>('/user/update', {
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
   })
 }

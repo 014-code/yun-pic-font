@@ -9,6 +9,10 @@
         <a-button type="primary" @click="toCreate(spaceDetail.spaceId)" style="margin-right: 20px;">
           创建图片
         </a-button>
+        <!--   创建图片   -->
+        <a-button type="ghost" @click="model.visible = true" style="margin-right: 20px;">
+          批量编辑
+        </a-button>
         <!--   空间容量   -->
         <a-progress type="circle" :percent="progressPercent" :size="40" />
       </div>
@@ -56,6 +60,36 @@
           " v-model:current="formPage.pageNum"
                   :total="formPage.total"
                   :pageSize="formPage.pageSize" @change="handlePageChange" />
+    <!--  批量编辑弹窗  -->
+    <a-modal v-model:visible="model.visible"
+             @cancel="cancel()" title="批量编辑图片">
+      <a-typography-paragraph type="secondary">只对当前页面的图片生效</a-typography-paragraph>
+      <a-form :model="model.data">
+        <a-form-item label="命名规则">
+          <a-input v-model:value="model.data.nameRole"
+                   property="请输入命名规则，输入{序号}可动态生成"></a-input>
+        </a-form-item>
+        <a-form-item label="分类">
+          <a-select v-model:value="model.data.category" placeholder="请选择分类">
+            <a-select-option v-for="item in categoryList" :key="item" :value="item">{{ item }}
+            </a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-space></a-space>
+        <a-form-item label="标签" placeholder="请选择标签">
+          <a-select mode="tags" v-model:value="model.data.tags">
+            <a-select-option v-for="item in tagsList" :key="item" :value="item">{{ item }}
+            </a-select-option>
+          </a-select>
+        </a-form-item>
+      </a-form>
+      <template #footer>
+        <div style="display: flex; text-align: center">
+          <a-button type="primary" @click="submit()" :loading="loading">确定</a-button>
+          <a-button danger type="primary" @click="cancel()">取消</a-button>
+        </div>
+      </template>
+    </a-modal>
   </div>
 </template>
 
@@ -66,7 +100,7 @@ import { message } from 'ant-design-vue'
 import router from '@/router'
 import ACCESS_ENUM from '@/types/enum/accessEnum.ts'
 import { useRoute } from 'vue-router'
-import { detail } from '@/api/space.ts'
+import { batch, detail } from '@/api/space.ts'
 import SearchForm from '@/component/SearchForm.vue'
 import Share from '@/component/Share.vue'
 //图片数据
@@ -77,12 +111,58 @@ const route = useRoute()
 const spaceId = route.query.spaceId
 //从子组件拿到的搜索表单数据-记录
 const searchFormState = reactive<API.GetPictrueListParam>({})
+//加载
+const loading = ref(false)
 //分页
 const formPage = reactive({
   pageNum: 1,
   pageSize: 30,
   total: 0
 })
+
+const model = reactive({
+  //弹出框数据
+  visible: false,
+  //表单数据
+  data: {
+    nameRole: undefined,
+    tags: [],
+    category: undefined,
+    spaceId: Number(spaceId),
+    picIds: computed(() => picData.value.map(pic => pic.picId))
+  }
+})
+
+//所有分类信息
+const categoryList = ref([])
+//所有标签信息
+const tagsList = ref([])
+
+/**
+ * 关闭弹窗方法
+ */
+function cancel() {
+  model.visible = false
+}
+
+/**
+ * 打开弹窗方法
+ */
+function openModel() {
+  model.visible = true
+}
+
+/**
+ * 获取所有标签
+ */
+function getTags() {
+  allTags().then(res => {
+    categoryList.value = res.data.category
+    tagsList.value = res.data.tags
+  }).catch(err => {
+    message.error('获取标签和类别失败')
+  })
+}
 
 //弹窗ref
 const shareRef = ref()
@@ -101,33 +181,44 @@ function getListVo() {
   })
 }
 
+/**
+ * 提交批量编辑表单
+ */
+function submit() {
+  loading.value = true
+  const { data } = model
+  //发送请求
+  batch({
+    ...data
+  }).then(res => {
+    message.success(res.msg)
+  }).catch(err => {
+    message.error(err.msg)
+  }).finally(() => {
+    loading.value = false
+    getPicList(searchFormState)
+    model.visible = false
+  })
+}
+
 
 /**
  * 获取图片数据
  */
 function getPicList(formState: API.GetPictrueListParam) {
-  console.log('formPage当前值:', formPage)
-
-  // 确保pageNum有正确的值
   if (!formPage.pageNum || formPage.pageNum <= 0) {
     formPage.pageNum = 1
   }
-
   const { pageNum, pageSize } = formPage
-  console.log('解构后的pageNum:', pageNum, 'pageSize:', pageSize)
-
   const spaceIdNum = spaceId ? Number(spaceId) : undefined
-
   // 过滤掉formState中的分页参数，避免覆盖
   const { pageNum: _, pageSize: __, ...searchParams } = formState
-
   const body: API.GetPictrueListParam = {
     pageNum,
     pageSize,
     spaceId: spaceIdNum,
     ...searchParams
   }
-  console.log('API参数:', body)
   listVo(body).then(res => {
     picData.value = res.rows || []
     formPage.total = res.total || 0
@@ -164,7 +255,6 @@ function onColorChange(color: string) {
 function share(url: string) {
   //传值给url
   picUrl.value = url
-  console.log('啦啦啦啦啦啦啦啦啦啦')
   nextTick(() => {
     if (shareRef.value) {
       shareRef.value.openModel()
@@ -253,6 +343,7 @@ function handlePageChange(page: number, pageSize: number) {
 onMounted(() => {
   getPicList(searchFormState)
   getSpaceDetail()
+  getTags()
 })
 
 

@@ -22,6 +22,18 @@ export async function allSpace(options?: { [key: string]: any }) {
   })
 }
 
+/** 图片批量管理 PUT /yunSpace/batch */
+export async function batch(body: API.BatchPicParam, options?: { [key: string]: any }) {
+  return request<API.ResultTUtil>('/yunSpace/batch', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 /** 删除空间 DELETE /yunSpace/del/${param0} */
 export async function del(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
